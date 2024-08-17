@@ -2,10 +2,17 @@ const Blog=require('../models/blog');
 const {BlogTagsEnum}=require('../utils/common/enums');
 
 const getAllBlogs=async(req,res)=>{
+    // console.log('getAllBlogs called');
     try{
-        const blogs=await Blog.find();
-        res.json(blogs);
+        const filter=req.filter ||{};
+        const options=req.options||{};
+        const blogs=await Blog.find(filter)
+             .sort(options.sort);
+   
+            //  console.log('Blogs found',blogs.length);
+        res.status(200).json(blogs);
     }catch(error){
+        console.log(error);
         res.status(500).json({
             message:error.message
         });
@@ -14,6 +21,8 @@ const getAllBlogs=async(req,res)=>{
 
 const getBlogById=async (req,res)=>{
     try{
+        // const filter=req.filter ||{};
+        // const options=req.options||{};
         const blog=await Blog.findById(req.params.id);
 
         if(!blog){
@@ -167,63 +176,63 @@ updates.tags=tagsArray;
 }
 };
 
-const getBlogsByUser=async(req,res)=>{
-    try{
-        const userId=req.params.id;
+// const getBlogsByUser=async(req,res)=>{
+//     try{
+//         const userId=req.params.id;
 
-        if(!userId){
-            return res.status(400).json({
-                message:'User ID is required'
-            });
-        }
+//         if(!userId){
+//             return res.status(400).json({
+//                 message:'User ID is required'
+//             });
+//         }
 
 
-        const blogs=await Blog.find({author:userId});
+//         const blogs=await Blog.find({author:userId});
 
-        if(blogs.length==0){
-            return res.status(404).json({
-                message:'No blogs found for this user'
-            });
-        }
-        res.status(200).json(blogs);
+//         if(blogs.length==0){
+//             return res.status(404).json({
+//                 message:'No blogs found for this user'
+//             });
+//         }
+//         res.status(200).json(blogs);
 
-    }
-    catch(error){
-        console.log(error);
-        res.status(500).json({
-            message:'Server error'
-        });
-    }
-};
+//     }
+//     catch(error){
+//         console.log(error);
+//         res.status(500).json({
+//             message:'Server error'
+//         });
+//     }
+// };
 
-const getBlogsByTag=async(req,res)=>{
-    try{
-        const tag=req.params.tag;
+// const getBlogsByTag=async(req,res)=>{
+//     try{
+//         const tag=req.params.tag;
 
-        const formattedTag=tag.trim();
-        const allowedTags=Object.values(BlogTagsEnum);
+//         const formattedTag=tag.trim();
+//         const allowedTags=Object.values(BlogTagsEnum);
 
-        if(!allowedTags.includes(formattedTag)){
-            return res.status(400).json({
-                message:`Invalid tag: ${formattedTag}.Allowed tags are ${allowedTags}`,
-            });
-        }
+//         if(!allowedTags.includes(formattedTag)){
+//             return res.status(400).json({
+//                 message:`Invalid tag: ${formattedTag}.Allowed tags are ${allowedTags}`,
+//             });
+//         }
 
-        const blogs=await Blog.find({tags:formattedTag});
-        if(blogs.length==0){
-            return res.status(404).json({
-                message:`No blogs found with the tag ${formattedTag}`,
-            });
-        }
+//         const blogs=await Blog.find({tags:formattedTag});
+//         if(blogs.length==0){
+//             return res.status(404).json({
+//                 message:`No blogs found with the tag ${formattedTag}`,
+//             });
+//         }
 
-        res.status(200).json(blogs);
-    }catch (error){
-        console.log(error);
-        res.status(500).json({
-            message:'Server error',
-        });
-    }
-};
+//         res.status(200).json(blogs);
+//     }catch (error){
+//         console.log(error);
+//         res.status(500).json({
+//             message:'Server error',
+//         });
+//     }
+// };
 module.exports={
 
 
@@ -232,6 +241,6 @@ module.exports={
     createBlog,
     deleteBlog,
     updateBlog,
-    getBlogsByUser,
-    getBlogsByTag
+    // getBlogsByUser,
+    // getBlogsByTag
 }
