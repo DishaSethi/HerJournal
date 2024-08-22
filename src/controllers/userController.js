@@ -93,10 +93,37 @@ const getUserDetails=async(req,res)=>{
 };
 
 
+const getUserProfile=async(req,res)=>{
+    try{
+        const userId=req.user;
+        console.log("User id:", userId);
+        const user=await User.findById(userId).select('-password');
+
+        if(!user){
+            return res.status(404).json({
+                message:'User not found'
+            })
+        }
+
+        const blogs=await blog.find({author: userId});
+
+        res.json({
+            email:user.email,
+            username:user.username,
+            blogs
+        });
+    }catch (error){
+        console.log(error);
+        res.status(500).json({
+            message:'Server error'
+        });
+    }
+}
 
 module.exports={
     register,
     login,
     getUserDetails,
+    getUserProfile
     // getBlogsByUser
 };

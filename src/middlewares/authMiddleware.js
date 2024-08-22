@@ -14,7 +14,8 @@ const authenticateUser=(req,res,next)=>{
     console.log('JWT_SECRET:',JWT_SECRET);
     const decoded=jwt.verify(token,JWT_SECRET);
     req.user=decoded.user;
-    console.log(req.user);
+
+    console.log("Decoded user:",req.user);
     next();
  }catch (error){
     console.log(error);

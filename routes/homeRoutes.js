@@ -17,4 +17,15 @@ router.get('/',async (req,res)=>{
    }
 });
 
+router.get('/blogs/:id', async(req,res)=>{
+    try{
+        const response=await axios.get(`http://localhost:5000/api/blogs/${req.params.id}`);
+        const blog=response.data;
+        res.render('blog',{blog});
+    }catch(error){
+        console.log(error);
+        res.status(500).json({message:error.message});
+    }
+})
+
 module.exports=router;
