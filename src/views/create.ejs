@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Blog</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/create">Create Blog</a></li>
+                <li><button href="/logout">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <h1>Create a New Blog</h1>
+        <form id="create-blog-form" method="POST" action="http://localhost:5000/api/blogs/create">
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title" required> <br><br>
+
+            <label for="content">Content:</label>
+            <textarea name="content" id="content" rows="10" required></textarea> <br><br>
+
+            <button type="submit">Create Blog</button>
+        </form>
+
+   
+    </main>
+
+    <footer>
+        <p>Made with love by Disha Sethi</p>
+    </footer>
+    <script >
+        // const axios=require('axios');
+        
+document.addEventListener('DOMContentLoaded',()=>{
+    // console.log(document.cookie);
+    // const cookies = document.cookie.split('; ');
+    // const tokenCookie = cookies.find(row => row.startsWith('token='));
+    // const token = tokenCookie ? tokenCookie.split('=')[1] : null;
+    
+    // function getCookie(name) {
+    //         const value = `; ${document.cookie}`;
+    //         const parts = value.split(`; ${name}=`);
+    //         if (parts.length === 2) return parts.pop().split(';').shift();
+    //     }
+
+                 const token = req.cookies.token;
+            console.log('Token:', token);
+
+            if (!token) {
+                window.location.href = '/login';
+                return;
+            }
+
+    document.getElementById('create-blog-form').addEventListener('submit',async function(event){
+        event.preventDefault();
+    
+        const title=document.getElementById('title').value;
+        const content=document.getElementById('content').value;
+        // const tags=document.getElementById('tags').value.split(',');
+    
+        try{
+            const response=await axios.post('http://localhost:5000/api/blogs/create',{
+                title,
+                content,
+                // tags
+            } ,  {headers:{Authorization: `Bearer ${token}`},
+   withCredentials:true,
+        });
+    
+            if(response.status===201){
+                res.redirect(`localhost:5000/blogs/${response.data.blog._id}`);
+            }else{
+                console.log('Failed to create a blog');
+            }
+    
+        }catch(error){
+            console.log('Error creating blog',error);
+        }
+    });
+
+        });
+
+    </script>
+</body>
+</html>

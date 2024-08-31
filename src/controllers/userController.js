@@ -3,6 +3,7 @@ const bcrypt=require('bcryptjs');
 const jwt=require('jsonwebtoken');
 const blog = require('../models/blog');
 
+
 // const JWT_SECRET='your_jwt_secret_key';
 
 const register=async(req,res)=>{
@@ -61,8 +62,17 @@ const login=async(req,res)=>{
         }
         // const payload={user:user.id}
 
-        const token=jwt.sign({ user:user.id},'your_jwt_secret',{expiresIn:'1h'});
-        res.json({token});
+        const token=jwt.sign({ user:user.id},'your_jwt_secret',{expiresIn:'1d'});
+        
+       return res.cookie("token", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+        })
+          .status(200)
+          .json({
+            message:'Logged in successfully',
+            token:token
+        });
 
 
     }
@@ -120,10 +130,31 @@ const getUserProfile=async(req,res)=>{
     }
 }
 
+const logout=async(req,res)=>{
+
+    try{
+        res.clearCookie('token',{
+            httpOnly:true,
+            secure:process.env.NODE_ENV==='production'
+        });
+        res.status(200).json({
+            message: 'Logged out successfully'
+        });
+        
+    }catch(error){
+        console.log('Logout Error:',error);
+        res.status(500).json({
+            message:'Logout failed'
+        });
+
+    }
+};
+
 module.exports={
     register,
     login,
     getUserDetails,
-    getUserProfile
+    getUserProfile,
+    logout
     // getBlogsByUser
 };

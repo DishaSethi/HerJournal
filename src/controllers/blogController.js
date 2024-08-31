@@ -7,7 +7,9 @@ const getAllBlogs=async(req,res)=>{
         const filter=req.filter ||{};
         const options=req.options||{};
         const blogs=await Blog.find(filter)
-             .sort(options.sort);
+             .sort(options.sort)
+             .populate('author','username')
+             .exec();
    
             //  console.log('Blogs found',blogs.length);
         res.status(200).json(blogs);
@@ -23,7 +25,9 @@ const getBlogById=async (req,res)=>{
     try{
         // const filter=req.filter ||{};
         // const options=req.options||{};
-        const blog=await Blog.findById(req.params.id);
+        const blog=await Blog.findById(req.params.id)
+                    .populate('author','username')
+                    .exec();
 
         if(!blog){
             return res.status(404).json({
@@ -40,6 +44,8 @@ const getBlogById=async (req,res)=>{
 };
 
 const createBlog=async(req,res)=>{
+
+    console.log('Request Body:', req.body);
     const {title,content,tags}=req.body;
 if(!title || !content){
     return res.status(400).json({message:'Title and content required'});
