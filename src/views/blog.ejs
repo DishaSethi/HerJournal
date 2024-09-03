@@ -12,6 +12,8 @@
                 <li><a href="/">Home</a></li>
                 <li><a href="/profile">Profile</a></li>
                 <li><a href="/create">Create Blog</a></li>
+
+                <!-- <li><a href="/logout">Logout</a></li> -->
                 <li><a href="/login">Login</a></li>
             </ul>
         </nav>
@@ -22,13 +24,19 @@
     <main>
         <article>
             <p><%= blog.content %></p>
-        </article>
-        <p>Tags: <%= blog.tags.join(',')%></p>
-    </main>
 
+        <p>Tags: <%= blog.tags.join(',')%></p>
+        <form action="/delete/<%=blog._id %>" method="POST" id="delete-blog-form">
+    <button id="submit">Delete Blog</button>
+</form>
+        </article>
+    </main>   
     <footer>
         <p>Made with love by Disha Sethi</p>
     </footer>
+
+  
+  
 </body>
 </html>
 

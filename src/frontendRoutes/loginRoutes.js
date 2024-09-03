@@ -82,7 +82,12 @@ try{
 
 
 router.get('/create',async (req,res)=>{
+    const token=req.cookies.token;
+    if(!token){
+        res.render('login');
+    }else{
     res.render('create');
+    }
 })
 
 module.exports=router;
