@@ -8,8 +8,8 @@ router.get('/',async (req,res)=>{
     params:req.query
    });
    const blogs=response.data;
-//    const isAuthenticated=req.cookies.token ? true: false;
-   res.render('home',{blogs});
+   const isAuthenticated=req.cookies.token ? true: false;
+   res.render('home',{blogs,isAuthenticated});
    } catch (error){
     console.log(error);
     res.status(500).json({

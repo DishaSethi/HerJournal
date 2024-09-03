@@ -13,7 +13,12 @@
                 <li><a href="/">Home</a></li>
                 <li><a href="/profile">Profile</a></li>
                 <li><a href="/create">Create Blog</a></li>
+                <% if(isAuthenticated) {%>
+
+                    <li><button id="logout-button">Logout</button></li>
+                <%} else { %>
                 <li><a href="/login">Login</a></li>
+                <% } %>
             </ul>
         </nav>
 
@@ -45,11 +50,31 @@
                 </li>
                 <%}) %>
         </ul>
+        <script>
+            function handleLogout(){
+                fetch('/logout',{method:'POST'})
+                  .then(response=>{
+                    if(response.ok){
+                        // console.log("logged out");
+                       
+                        // document.cookie = 'token=; Max-Age=0; path=/';
+                        window.location.href='/';
+                    }else{
+                        console.log('Logout failed');
+                    }
+                  })
+                  .catch(error=>{
+                    console.log('Error:',error);
+                  });
+            }
+
+            document.getElementById("logout-button").addEventListener('click',handleLogout);
+        </script>
     </main>
 
     <footer>
         <p>Made with love by Disha Sethi</p>
     </footer>
-    <script src="/scripts/main.js"></script>
+
 </body>
 </html>
