@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Blog</title>
+</head>
+<body>
+    <form id="update-blog-form" action="/update/<%=blog._id%>" method="POST">
+        <input type="text" name="title" id="title" value="<%= blog.title %>" required>
+        <textarea name="content" id="content" required><%= blog.content%></textarea>
+        
+        <button type="submit">Update Blog</button>
+    </form>
+    
+    <!-- <script src="/scripts/upd"></script> -->
+</body>
+</html>

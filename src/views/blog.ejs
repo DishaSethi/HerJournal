@@ -14,7 +14,12 @@
                 <li><a href="/create">Create Blog</a></li>
 
                 <!-- <li><a href="/logout">Logout</a></li> -->
+                <% if(isAuthenticated) {%>
+
+                    <li><button id="logout-button">Logout</button></li>
+                <%} else { %>
                 <li><a href="/login">Login</a></li>
+                <% } %>
             </ul>
         </nav>
         <h1><%= blog.title %></h1>
@@ -29,7 +34,32 @@
         <form action="/delete/<%=blog._id %>" method="POST" id="delete-blog-form">
     <button id="submit">Delete Blog</button>
 </form>
+        <form action="/update/<%=blog._id %>" method="GET" id="update-blog-form">
+    <button id="submit">Update Blog</button>
+</form>
+
         </article>
+        
+        <script>
+            function handleLogout(){
+                fetch('/logout',{method:'POST'})
+                  .then(response=>{
+                    if(response.ok){
+                        // console.log("logged out");
+                       
+                        // document.cookie = 'token=; Max-Age=0; path=/';
+                        window.location.href='/';
+                    }else{
+                        console.log('Logout failed');
+                    }
+                  })
+                  .catch(error=>{
+                    console.log('Error:',error);
+                  });
+            }
+
+            document.getElementById("logout-button").addEventListener('click',handleLogout);
+        </script>
     </main>   
     <footer>
         <p>Made with love by Disha Sethi</p>
