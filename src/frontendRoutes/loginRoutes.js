@@ -88,6 +88,35 @@ router.get('/create',async (req,res)=>{
     }else{
     res.render('create');
     }
-})
+});
+
+router.get('/register',(req,res)=>{
+    res.render('register');
+});
+
+
+router.post('/register',async(req,res)=>{
+    const {username,email,password}=req.body;
+
+    try{
+        const response=await axios.post('http://localhost:5000/api/users/register',{
+            username,
+            email,
+            password
+        },{withCredentials:true});
+
+        if(response.status==201){
+            console.log('User registered successfully:',response.data);
+
+            res.redirect('/login');
+        }else{
+            res.render('register',{error:'Registration failed. Try again.'});
+        }
+    } catch(error){
+        console.log('Error registering :',error);
+
+        res.render('register',{error:'An error occurred during registration'});
+    }
+});
 
 module.exports=router;

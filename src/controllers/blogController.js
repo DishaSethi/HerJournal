@@ -1,6 +1,6 @@
 const Blog=require('../models/blog');
 const {BlogTagsEnum}=require('../utils/common/enums');
-
+const Comment=require('../models/comment');
 const getAllBlogs=async(req,res)=>{
     // console.log('getAllBlogs called');
     try{
@@ -28,13 +28,13 @@ const getBlogById=async (req,res)=>{
         const blog=await Blog.findById(req.params.id)
                     .populate('author','username')
                     .exec();
-
+const comments=await Comment.find({blog:req.params.id}).populate('user','username');
         if(!blog){
             return res.status(404).json({
                 message:'Blog not found'
             });
         }
-        res.json(blog);
+        res.json({blog,comments});
     }catch(error){
         console.log(error);
         res.status(500).json({

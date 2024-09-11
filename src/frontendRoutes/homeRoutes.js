@@ -2,6 +2,7 @@ const express=require('express');
 const router=express.Router();
 const axios=require('axios');
 const Blog=require('../models/blog');
+const Comment=require('../models/comment');
 router.get('/',async (req,res)=>{
    try{
    const response=await axios.get('http://localhost:5000/api/blogs',{
@@ -25,10 +26,14 @@ router.get('/blogs/:id', async(req,res)=>{
         const response=await axios.get(`http://localhost:5000/api/blogs/${req.params.id}`,{withCredentials:true,  headers:{
             Authorization:`Bearer ${token}`
         }});
-        const blog=response.data;
+        const {blog,user}=response.data;
         const isAuthenticated=req.cookies.token ? true: false;
+
+        const comments=await Comment.find({blog:req.params.id}).populate('user');
+
         console.log('Blog data:',blog);
-        res.render('blog',{blog,isAuthenticated});
+        console.log('Comments:',comments);
+        res.render('blog',{blog,user,comments,isAuthenticated});
     }catch(error){
         console.log(error);
         res.status(500).json({message:error.message});

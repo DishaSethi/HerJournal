@@ -17,10 +17,26 @@ if(!content){
             content,
         });
 
-        const savedComment=await comment.save();
-        res.status(201).json(savedComment);
+        await comment.save();
+
+        const populatedComment=await Comment.findById(comment._id).populate('user','username');
+        // blog.comments.push({user:req.user,comment:comment.content});
+     const io=req.app.get('io');
+     io.emit('commentAdded',{
+        blogId,
+        user:populatedComment.user.username,
+        content:populatedComment.content,
+        createdAt:populatedComment.createdAt
+     });
+
+        // emit real-time comment via socket.io
+        // const io=req.app.get('io');
+        // io.emit('commentAdded',{blogId,user:req.user,comment});
+// console.log("comment added");
+        res.status(201).json({message:"Comment added successfully",comment:populatedComment});
         }
         catch(error){
+            console.log(error);
             res.status(500).json({message: error.message});
         }
     };

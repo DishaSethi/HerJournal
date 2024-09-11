@@ -6,8 +6,10 @@ const cors = require('cors');
 const MongoStore = require('connect-mongo');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-
 const path = require('path');
+const http=require('http');
+const socketIo=require('socket.io');
+// const Blog=require('./models/blog');
 
 const blogsRouter = require('./routes/blogRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -21,6 +23,10 @@ const connectDB = require('./config/db');
 connectDB();
 
 const app = express();
+const server=http.createServer(app);
+const io=  socketIo(server);
+
+app.set('io',io);
 //Middleware
 
 app.use(cookieParser());
@@ -70,5 +76,23 @@ app.use('/',homeRoutes);
 app.use('/',loginRoutes);
 app.use('/',profileRoutes);
 
+//Socket.io connection
+io.on('connection',(socket)=>{
+    console.log('a user connected');
+
+
+// handle new comment
+// socket.on('newComment',(comment)=>{
+//     io.emit('updateComments',comment);
+// });
+
+socket.on('disconnect',()=>{
+    console.log('user disconnected');
+});
+});
+// socket.emit('testEvent',{message:'Hello from server!'});
+    // handle disconnection
+ 
+
 const PORT=process.env.PORT||5000;
-app.listen(PORT,()=> console.log(`Server running on port ${PORT} `));
+server.listen(PORT,()=> console.log(`Server running on port ${PORT} `));

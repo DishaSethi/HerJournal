@@ -38,9 +38,31 @@
     <button id="submit">Update Blog</button>
 </form>
 
-        </article>
-        
+<h2>Comments</h2>
+<ul id="comments-list">
+    <% comments.forEach(comment=>{%>
+        <li><strong><%= comment.user.username %>:</strong><%= comment.content %></li>
+        <%})%>
+</ul>
+
+        <%if(isAuthenticated){ %>
+        <form action="" id="comment-form">
+            <textarea name="" id="comment-content" placeholder="add a comment"></textarea>
+            <button type="submit">Submit</button>
+        </form>
+        <% }else {%>
+        <p><a href="/login">Login to add a comment</a></p>
+        <% } %>
+
+    </article>
+</main>  
+<footer>
+    <p>Made with love by Disha Sethi</p>
+</footer>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
         <script>
+            
             function handleLogout(){
                 fetch('/logout',{method:'POST'})
                   .then(response=>{
@@ -59,11 +81,49 @@
             }
 
             document.getElementById("logout-button").addEventListener('click',handleLogout);
-        </script>
-    </main>   
-    <footer>
-        <p>Made with love by Disha Sethi</p>
-    </footer>
+      
+      const socket=io();
+
+      document.getElementById('comment-form').addEventListener('submit', async(e)=>{
+        e.preventDefault();
+
+        const commentContent=document.getElementById('comment-content').value;
+        const blogId='<%= blog._id%>';
+
+        try{
+            const response=await axios.post(`http://localhost:5000/api/comments/${blogId}`,{
+                content:commentContent
+            },{withCredentials:true});
+
+            // clear the comment form
+            const comment =response.data.comment;
+            console.log("comment is",comment);
+
+            document.getElementById('comment-content').value='';
+
+        }catch(error){
+            console.error('Error submitting comment:',error);
+        }
+      });
+
+      
+     
+
+socket.on('commentAdded',(comment)=>{
+    if(comment.blogId==='<%= blog._id%>'){
+        const commentList=document.getElementById('comments-list');
+        const newCommentItem=document.createElement('li');
+        newCommentItem.innerHTML=`<strong>${comment.user}:<strong>${comment.content}`;
+            commentList.appendChild(newCommentItem);
+    }
+});
+// socket.on('testEvent',(message)=>{
+//     console.log('Received testEvent',message);
+// })
+    
+      </script>
+     
+
 
   
   
