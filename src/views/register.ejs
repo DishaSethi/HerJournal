@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <link rel="stylesheet" href="/styles/styles.css"> 
+    <link rel="stylesheet" href="/styles/login.css"> 
 </head>
-<body>
-    <h2>Register</h2>
-    <form action="/register" method="POST" id="register-form">
+<body class="login-body">
+    <header>
+    <h1>Register</h1>
+</header>
+<main id="login">
+    <form action="/register" method="POST" id="login-form">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
 
@@ -19,7 +24,8 @@
 
         <button type="submit">Register</button>
     </form>
-
+    <p>Already have an account? <a href="/login"> Login here</a></p>
+</main>
     <div id="error-message"></div>
 
     

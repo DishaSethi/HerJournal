@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
+    <link rel="stylesheet" href="/styles/styles.css"> 
+    <link rel="stylesheet" href="/styles/home.css"> 
 </head>
 <body>
     <header>
@@ -15,25 +17,34 @@
                 <li><button id="logout-button">Logout</button></li>
             </ul>
         </nav>
+        <h1>Welcome, <%= username%> !</h1>
+        <form id="search" method="get" id="searchForm" action="/">
+            <input id="search-input" type="text" name="keyword" placeholder="Search by keyword, author, tags">
+            <!-- <input type="text" name="author" placeholder="Search by author">
+            <input type="text" name="tags" placeholder="Search by tags"> -->
+            <button type="submit">Search</button>
+        </form>
     </header>
 
     <main>
-        <h1>Welcome, <%= username%> !</h1>
+  
 
         <section>
-            <h2>Your Profile</h2>
+            <!-- <h2>Your Profile</h2> -->
 
-            <p><%= email%></p>
+            <!-- <p><%= username%></p> -->
 
         </section>
 
         <section>
-            <h2>Your Blogs</h2>
-            <ul>
+            <h1>Your Blogs</h1>
+            <ul id="blogList">
                 <% blogs.forEach(blog=>{ %>
                <li>
                 <h3><a href="/blogs/<%= blog._id %>"><%= blog.title %></a></h3>
-                <p><%= blog.content.substring(0,100)%>...</p>
+                <!-- <p><%= blog.content.substring(0,100)%>...</p> -->
+                <p><%= blog.content.substring(0,100) %>...</p>
+                <a href="/blogs/<%= blog._id %>">Read More </a>
                </li>
              <% }); %>
             </ul>

@@ -4,15 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Blog</title>
+    <link rel="stylesheet" href="/styles/styles.css"> 
+    <link rel="stylesheet" href="/styles/create.css"> 
 </head>
 <body>
+
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/create">Create Blog</a></li>
+                <li><button  id="logout-button" >Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Update Blog</h1>
     <form id="update-blog-form" action="/update/<%=blog._id%>" method="POST">
-        <input type="text" name="title" id="title" value="<%= blog.title %>" required>
-        <textarea name="content" id="content" required><%= blog.content%></textarea>
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="title" value=<%= blog.title %> required>
+        <label for="content">Content:</label>
+        <textarea name="content" id="content" value="<%=blog.content%>" required></textarea>
         
         <button type="submit">Update Blog</button>
     </form>
-    
+</main>
     <!-- <script src="/scripts/upd"></script> -->
 </body>
 </html>
