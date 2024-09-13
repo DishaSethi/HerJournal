@@ -82,6 +82,7 @@ router.get('/update/:id',async(req,res)=>{
                 Authorization:`Bearer ${token}`
             }
     });
+    console.log("response is:",response.data);
 
     res.render('update',{blog:response.data});
     }catch(error){
