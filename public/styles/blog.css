@@ -1,0 +1,7 @@
+#delete-blog-form, #update-blog-form{
+width: 100%;
+
+    display: flex !important;
+    justify-content:  center !important;
+    align-items: center !important;
+}

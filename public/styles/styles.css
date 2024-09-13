@@ -1,79 +1,305 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
+    font-family: 'Arial', sans-serif;
+    background-color: #1c1c1c; /* Dark grey background */
+    color: #e0e0e0; /* Light grey/white text */
+    line-height: 1.6;
+    /* padding: 20px; */
 }
 
-header {
-    background-color: #333;
-    color: white;
-    padding: 10px 0;
-    text-align: center;
+/* Global Styles */
+/* Navbar Styles */
+/* Navbar Styles */
+nav {
+    background-color: #2a2a2a; /* Dark grey background for navbar */
+    /* padding: 20px 0; */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* Subtle shadow for depth */
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000; /* Ensure the navbar stays on top */
 }
 
-header nav ul {
+ nav {
+    display: flex;
+    justify-content: center; /* Center-align the items horizontally */
+    align-items: center;
+    /* max-width: 1200px; */
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 10vh;
+}
+
+
+
+ nav ul {
+    display: flex;
     list-style: none;
+    margin: 0;
     padding: 0;
+    gap: 20px; /* Space between items */
+}
+
+ nav ul li {
     margin: 0;
 }
 
-header nav ul li {
-    display: inline;
-    margin: 0 15px;
-}
-
-header nav ul li a {
-    color: white;
+ nav ul li a {
+    color: #00d1b2; /* Turquoise for links */
+    font-size: 1.1rem;
     text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-header h1 {
-    margin-top: 10px;
+ nav ul li a:hover {
+    background-color: #00d1b2; /* Turquoise background on hover */
+    color: #2a2a2a; /* Dark grey text on hover */
 }
 
-#searchForm {
-    margin: 20px 0;
+/* Mobile Menu (Hamburger) */
+.menu-icon {
+    display: none;
+    font-size: 2rem;
+    color: #00d1b2; /* Turquoise hamburger menu icon */
+    cursor: pointer;
+    margin-left: auto; /* Aligns the hamburger icon to the right */
 }
 
-#searchForm input {
-    padding: 5px;
-    margin-right: 10px;
+@media (max-width: 768px) {
+     nav ul {
+        display: none;
+        flex-direction: column;
+        background-color: #1a1a1a; /* Darker grey for mobile menu */
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 100%;
+        padding: 20px;
+        border-top: 2px solid #00d1b2;
+        align-items: center; /* Center-align items in the mobile menu */
+    }
+
+    nav ul.active {
+        display: flex;
+    }
+
+     nav ul li {
+        margin: 10px 0;
+    }
+
+    .menu-icon {
+        display: block;
+    }
 }
 
-#searchForm button {
-    padding: 5px 10px;
-}
-
-main {
-    padding: 20px;
-}
-
-main h2 {
-    text-align: center;
-}
-
-#blogList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-#blogList li {
-    background-color: white;
-    padding: 20px;
-    margin: 10px 0;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-#blogList li h3 {
-    margin-top: 0;
-}
-
-footer {
-    text-align: center;
-    padding: 10px 0;
-    background-color: #333;
+#logout-button{
+    padding: 10px 15px;
+    background-color: #00d1b2; /* Turquoise button */
+    border: none;
     color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+}
+#logout-button:hover{
+    background-color: #00b396;
+}
+
+
+/* Navbar Branding (Logo or Title) */
+/* header .logo {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #00d1b2; /* Turquoise logo/text */
+
+
+
+
+/* Mobile Menu (Hamburger) */
+header .menu-icon {
+    display: none;
+    font-size: 2rem;
+    color: #00d1b2; /* Turquoise hamburger menu icon */
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    header nav ul {
+        display: none;
+        flex-direction: column;
+        background-color: #1a1a1a; /* Darker grey for mobile menu */
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 100%;
+        padding: 20px;
+        border-top: 2px solid #00d1b2;
+    }
+
+    header nav ul.active {
+        display: flex;
+    }
+
+    header nav ul li {
+        margin: 10px 0;
+    }
+
+    header .menu-icon {
+        display: block;
+    }
+}
+
+header h1{
+    margin-top: 15vh !important;
+    padding: 20px;
+
+    font-size: 2.5rem;
+    color: #40e0d0; /* Turquoise */
+    display: flex;
+    justify-content: center;
+}
+/* Main Content */
+main {
+    margin-top: 15vh !important;
+}
+main h1 {
+    padding: 20px;
+
+    font-size: 2.5rem;
+    color: #40e0d0; /* Turquoise */
+    display: flex;
+    justify-content: center;
+}
+
+main p {
+    font-size: 1rem;
+    color: #b3b3b3;
+    display: flex;
+    justify-content: center; /* Light grey for secondary text */
+}
+
+
+
+
+article {
+    background-color: #1a1d1e; /* Dark grey card background */
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    transition: background-color 0.3s ease;
+}
+
+article h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #40e0d0; /* Turquoise for headings */
+}
+
+article p {
+    margin-bottom: 20px;
+    line-height: 1.8;
+    color: #e0e0e0; /* Light grey for content */
+}
+
+/* Forms */
+form {
+    margin-top: 25px;
+}
+
+form textarea {
+    width: 100%;
+    height: 120px;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background-color: #1c1c1c; /* Dark form background */
+    color: #e0e0e0;
+    margin-bottom: 12px;
+}
+
+form button {
+    padding: 12px 18px;
+    background-color: #00d1b2; /* Turquoise button */
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+form button:hover {
+    background-color: #00b396; /* Slightly darker turquoise for hover */
+}
+
+/* Footer */
+footer {
+    margin-top: 40px;
+    text-align: center;
+    color: #777;
+}
+
+/* Comments */
+#comments-list {
+    list-style: none;
+    margin-top: 30px;
+}
+
+#comments-list li {
+    background: #444; /* Dark grey background for comments */
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    color: #f4f4f4;
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header nav ul {
+        flex-direction: column;
+    }
+
+    header nav ul li {
+        margin-bottom: 15px;
+    }
+
+    article {
+        padding: 20px;
+    }
+
+    form textarea {
+        height: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 2rem;
+    }
+
+    article h2 {
+        font-size: 1.6rem;
+    }
+
+    form textarea {
+        height: 80px;
+    }
 }
