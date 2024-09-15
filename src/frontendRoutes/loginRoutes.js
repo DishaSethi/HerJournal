@@ -3,6 +3,7 @@ const router=express.Router();
 const axios=require('axios');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const jwt = require('jsonwebtoken');
 
 router.use(session({
     secret: 'your_secret_key',
@@ -80,15 +81,54 @@ try{
 
 
 
+router.get('/create', async (req, res) => {
+    const token = req.cookies.token;
+    console.log('Token received on server:', token); // Debugging log
 
-router.get('/create',async (req,res)=>{
-    const token=req.cookies.token;
-    if(!token){
-        res.render('login');
-    }else{
-    res.render('create');
+   {
+        // You might want to verify the token here
+        try {
+            // Verify the token
+            const decoded = jwt.verify(token, 'your_jwt_secret');
+            // Proceed to render the create page if token is valid
+            res.render('create');
+        } catch (err) {
+            // console.error('Token verification failed:', err);
+            res.redirect('/login'); // Redirect to login if token verification fails
+        }
     }
 });
+
+router.post('/create',async(req,res)=>{
+    const { title, content } = req.body;
+    // const token = req.cookies.token;
+    const token=req.cookies.token;
+    if(!token){
+        res.redirect('/login');
+    }
+        try{
+            const response=await axios.post(`http://localhost:5000/api/blogs/create`,{
+                title,
+                content
+            },{
+                headers:{Authorization: `Bearer ${token}`},
+                withCredentials:true
+            });
+            console.log("response is",response);
+            if(response.status===201){
+                res.redirect(`/blogs/${response.data._id}`);
+            }else{
+                res.status(400).send('Failed to create blog');
+            }
+        }catch(error){
+            console.log(error);
+            res.status(500).send('Internal Server error');
+        }
+
+    
+
+});
+
 
 router.get('/register',(req,res)=>{
     res.render('register');

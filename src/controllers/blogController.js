@@ -83,9 +83,10 @@ const blog=new Blog({
 });
     try{
         const newBlog=await blog.save();
-        res.status(201).json(newBlog);
+        console.log('Blog successfully created:', newBlog);
+      return  res.status(201).json(newBlog);
     } catch(error){
-        res.status(400).json({
+      return  res.status(400).json({
             message:error.message
         });
     }
