@@ -11,7 +11,16 @@
 <body>
     <header>
         <nav>
-            <ul>
+
+ 
+                <div class="menu-icon" id="menu-icon">
+                  &#9776; 
+                  <!-- Unicode for hamburger menu-icon -->
+                </div>
+      
+                <div class="menu-backdrop" id="menu-backdrop"></div>
+        
+            <ul id="nav-links">
                 <li><a href="/">Home</a></li>
                 <li><a href="/profile">Profile</a></li>
                 <li><a href="/create">Create Blog</a></li>
@@ -29,6 +38,12 @@
             <label for="content">Content:</label>
             <textarea name="content" id="content" rows="10" required></textarea> <br><br>
 
+            <label for="tags">Select Tags (Max 5)</label>
+            <select name="tags" id="tags" multiple>
+                <% allowedTags.forEach(tag=>{ %>
+                    <option value="<%= tag %>"><%= tag %></option>
+                <%})%>
+            </select>
             <button type="submit">Create Blog</button>
         </form>
 
@@ -39,63 +54,38 @@
         <p>Made with love by Disha Sethi</p>
     </footer>
     <script >
-        // const axios=require('axios');
-        
-// document.addEventListener('DOMContentLoaded',()=>{
-    // console.log(document.cookie);
-    // const cookies = document.cookie.split('; ');
-    // const tokenCookie = cookies.find(row => row.startsWith('token='));
-    // const token = tokenCookie ? tokenCookie.split('=')[1] : null;
-    
-    // function getCookie(name) {
-    //         const value = `; ${document.cookie}`;
-    //         const parts = value.split(`; ${name}=`);
-    //         if (parts.length === 2) return parts.pop().split(';').shift();
-    //     }
 
-            //      const token = req.cookies.token;
-            // console.log('Token:', token);
+    const menuIcon=document.getElementById('menu-icon');
 
-            // if (!token) {
-            //     window.location.href = '/login';
-            //     return;
-            // }
+    const navLinks=document.getElementById('nav-links');
+    const menuBackdrop = document.getElementById('menu-backdrop');
+    menuIcon.addEventListener('click',()=>{
+    navLinks.classList.toggle('active');
+    menuBackdrop.classList.toggle('active');
+    })
 
-    // document.getElementById('create-blog-form').addEventListener('submit',async function(event){
-    //     event.preventDefault();
-    
-    //     const title=document.getElementById('title').value;
-//         const content=document.getElementById('content').value;
-//         // const tags=document.getElementById('tags').value.split(',');
-    
-//         try{
-//             const response=await axios.post('http://localhost:5000/api/blogs/create',{
-//                 title,
-//                 content,
-//                 // tags
-//             } ,  {headers:{Authorization: `Bearer ${token}`},
-//    withCredentials:true,
-//         });
-//         try{
-    //     console.log('Full response:', response);
-    //     }catch(error){
-    //         console.log("error in getting response",error);
-    //     }
-    //         if(response.status===201){
-    //             res.redirect(`localhost:5000/blogs/${response.data.blog._id}`);
-    //         }else{
-    //             console.log('Failed to create a blog');
-    //         }
-    
-    //     }catch(error){
-    //         console.log('Error creating blog',error);
-    //     }
-    // });
+    menuBackdrop.addEventListener('click',()=>{
+    navLinks.classList.remove('active');
+    menuBackdrop.classList.remove('active');
+    });
+  document.getElementById('create-blog-form').addEventListener('submit',function(event){
+    const tagsSelect=document.getElementById('tags');
+    const selectedTags=Array.from(tagsSelect.selectedOptions).map(option=> option.value);
+    const formData = new FormData(event.target);
 
+    if(selectedTags.length>5){
+        event.preventDefault();
+        alert('You can only select up to 5 tags');
+        return;
+    }
+// const hiddenTagsInput=document.createElement('input');
+// hiddenTagsInput.type='hidden';
+// hiddenTagsInput.name='tags';
+// hiddenTagsInput.value=JSON.stringify(selectedTags);
+// this.appendChild(hiddenTagsInput);
 
-    
-    
-    //     });
+  });
+
         function handleLogout(){
                 fetch('/logout',{method:'POST'})
                   .then(response=>{
@@ -114,6 +104,9 @@
             }
 
             document.getElementById("logout-button").addEventListener('click',handleLogout);
+
+                        
+
     </script>
 </body>
 </html>

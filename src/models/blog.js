@@ -1,6 +1,6 @@
 const mongoose=require('mongoose');
 const Schema=mongoose.Schema;
-const {BlogTagsEnum}=require('../utils/common/enums');
+const BlogTagsEnum=require('../utils/common/enums');
 const BlogSchema=new Schema({
     title:{
         type:String,

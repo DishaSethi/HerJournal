@@ -9,6 +9,4 @@ const BlogTagsEnum= Object.freeze({
 
 
 
-module.exports={
-    BlogTagsEnum
-};
+module.exports= BlogTagsEnum;

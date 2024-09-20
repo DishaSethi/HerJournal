@@ -72,19 +72,35 @@ nav {
     cursor: pointer;
     margin-left: auto; /* Aligns the hamburger icon to the right */
 }
-
+.menu-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+         z-index: 999;
+    }
+    
+    .menu-backdrop.active {
+        display: block;
+    }
 @media (max-width: 768px) {
+    
      nav ul {
         display: none;
         flex-direction: column;
         background-color: #1a1a1a; /* Darker grey for mobile menu */
         position: absolute;
         top: 60px;
+        gap: 0px !important;
         right: 0;
         width: 100%;
         padding: 20px;
         border-top: 2px solid #00d1b2;
-        align-items: center; /* Center-align items in the mobile menu */
+        align-items: center;
+        z-index: 1000;/* Scrollable menu if needed */
     }
 
     nav ul.active {

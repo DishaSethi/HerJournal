@@ -51,22 +51,15 @@ if(!title || !content){
     return res.status(400).json({message:'Title and content required'});
 }
 
-const tagsArray= (tags)?tags.split(',').map(tag=>tag.trim()):[];
-// console.log('Parsed tags:',tagsArray);
-if(!Array.isArray(tagsArray)||tagsArray.length>5){
-    return res.status(400).json({
-        message:'Tags must be an array with maximum of 5 tags'
-    });
+let tagsArray=[];
+if(tags){
+    if(typeof tags=== 'string'){
+        tagsArray=[tags.trim()];
+    }else if(Array.isArray(tags)){
+        tagsArray=tags.map(tag=> tag.trim());
+    }
 }
 
-const allowedTags=Object.values(BlogTagsEnum);
-// console.log('Allowed tags:',allowedTags);
-    const invalidTags=tagsArray.filter(tag=> !Object.values(BlogTagsEnum).includes(tag));
-    if(invalidTags.length>0){
-        return res.status(400).json({
-            message:`Invalid tags ${invalidTags.join(', ')}. Please use the valid tags ${allowedTags} `
-        });
-    }
 
 
 if(!req.user){
@@ -142,23 +135,20 @@ const updateBlog=async(req,res)=>{
 
 
   
-const tagsArray=tags?tags.split(',').map(tag=>tag.trim()):[];
 
-    if(tagsArray.length>5){
-    return res.status(400).json({
-        message:'Only maximum of 5 tags are allowed'
-    });
+  if (tags) {
+    if (typeof tags === 'string') {
+      // Handle single tag as a string and ensure it's not wrapped as an array with one element
+      tagsArray = tags.trim().length > 0 ? [tags.trim()] : [];
+    } else if (Array.isArray(tags)) {
+      // Handle multiple tags as an array
+      tagsArray = tags.filter(tag => tag.trim().length > 0).map(tag => tag.trim());
+    }
   }
-  
-const allowedTags=Object.values(BlogTagsEnum);
-  
-  const invalidTags=tagsArray? tagsArray.filter(tag=>!Object.values(BlogTagsEnum).includes(tag)):[];
-  if(invalidTags.length>0){
-    return res.status(400).json({
-        message:`Invalid tags: ${invalidTags.join(', ')}. Valid tags are ${allowedTags}`
-    });
-}
-updates.tags=tagsArray;
+// updates.tags=tagsArray;
+if (tagsArray.length > 0) {
+    updates.tags = tagsArray;
+  }
 
   const updatedBlog=await Blog.findByIdAndUpdate(blogId,updates,{new:true});
 

@@ -82,9 +82,17 @@ router.get('/update/:id',async(req,res)=>{
                 Authorization:`Bearer ${token}`
             }
     });
+    const tagResponse=await axios.get('http://localhost:5000/api/blogs/tags',{
+        headers:{Authorization:`Bearer ${token}`},
+        withCredentials:true,
+    })
+    console.log("tagsResponse:",tagResponse.data);
+    const allowedTags=tagResponse.data;
+    // res.render('update',{allowedTags});
+
     console.log("response is:",response.data);
 
-    res.render('update',{blog:response.data});
+    res.render('update',{blog:response.data,allowedTags});
     }catch(error){
         console.log('Error fetching blog data',error);
         const isAuthenticated=req.cookies.token ? true: false;
@@ -101,6 +109,7 @@ try{
     const response=await axios.put(`http://localhost:5000/api/blogs/${blogId}`,{
         title:req.body.title,
         content:req.body.content,
+        tags:req.body.tags
     
     },{
         withCredentials:true,

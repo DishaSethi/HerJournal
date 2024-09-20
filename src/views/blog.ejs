@@ -10,20 +10,24 @@
 <body>
     <header>
         <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/profile">Profile</a></li>
-                <li><a href="/create">Create Blog</a></li>
-
-                <!-- <li><a href="/logout">Logout</a></li> -->
-                <% if(isAuthenticated) {%>
-
-                    <li><button id="logout-button">Logout</button></li>
-                <%} else { %>
-                <li><a href="/login">Login</a></li>
-                <% } %>
-            </ul>
-        </nav>
+            <div class="menu-icon" id="menu-icon">
+              &#9776; 
+              <!-- Unicode for hamburger menu-icon -->
+            </div>
+  
+            <div class="menu-backdrop" id="menu-backdrop"></div>
+              <ul id="nav-links">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/profile">Profile</a></li>
+                  <li><a href="/create">Create Blog</a></li>
+                  <% if(isAuthenticated) {%>
+  
+                      <li><button id="logout-button">Logout</button></li>
+                  <%} else { %>
+                  <li><a href="/login">Login</a></li>
+                  <% } %>
+              </ul>
+          </nav>
       
 
     </header>
@@ -35,7 +39,12 @@
             <div id="content">
             <p><%= blog.content %></p>
 
-        <p>Tags: <%= blog.tags.join(',')%></p>
+        <p>Tags:</p>
+        <ul>
+            <% blog.tags.forEach(tag=>{%>
+                <li><%= tag%></li>
+                <%})%>
+        </ul>
         <form action="/delete/<%=blog._id %>" method="POST" id="delete-blog-form">
     <button id="submit">Delete Blog</button>
 </form>
@@ -68,7 +77,21 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
         <script>
-            
+                        
+    const menuIcon=document.getElementById('menu-icon');
+
+    const navLinks=document.getElementById('nav-links');
+    const menuBackdrop = document.getElementById('menu-backdrop');
+    menuIcon.addEventListener('click',()=>{
+    navLinks.classList.toggle('active');
+    menuBackdrop.classList.toggle('active');
+    })
+
+    menuBackdrop.addEventListener('click',()=>{
+    navLinks.classList.remove('active');
+    menuBackdrop.classList.remove('active');
+    });
+
             function handleLogout(){
                 fetch('/logout',{method:'POST'})
                   .then(response=>{
