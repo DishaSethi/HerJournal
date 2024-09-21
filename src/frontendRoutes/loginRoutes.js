@@ -22,7 +22,7 @@ router.post('/login',async(req,res)=>{
     try{
         const{email, password}=req.body;
 
-        const response=await axios.post('http://localhost:5000/api/users/login',{
+        const response=await axios.post('/api/users/login',{
            email,
             password},
             {withCredentials:true}
@@ -59,7 +59,7 @@ if (token) {
 router.post('/logout',async(req,res)=>{
 try{
     const token=req.cookies.token;
-    const response=await axios.post('http://localhost:5000/api/users/logout',{},{
+    const response=await axios.post('/api/users/logout',{},{
         withCredentials:true,
         headers:{
             Authorization:`Bearer ${token}`
@@ -94,7 +94,7 @@ router.get('/create', async (req, res) => {
             // Verify the token
             const decoded = jwt.verify(token, 'your_jwt_secret');
             // Proceed to render the create page if token is valid
-            const tagResponse=await axios.get('http://localhost:5000/api/blogs/tags',{
+            const tagResponse=await axios.get('/api/blogs/tags',{
                 headers:{Authorization:`Bearer ${token}`},
                 withCredentials:true,
             })
@@ -128,7 +128,7 @@ router.post('/create',async(req,res)=>{
     //     return res.status(400).send('You can only select up to 5 tags');
     // }
         try{
-            const response=await axios.post(`http://localhost:5000/api/blogs/create`,{
+            const response=await axios.post(`/api/blogs/create`,{
                 title,
                 content,
                 tags
@@ -161,7 +161,7 @@ router.post('/register',async(req,res)=>{
     const {username,email,password}=req.body;
 
     try{
-        const response=await axios.post('http://localhost:5000/api/users/register',{
+        const response=await axios.post('/api/users/register',{
             username,
             email,
             password

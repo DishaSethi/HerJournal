@@ -12,7 +12,7 @@ router.get('/profile',async (req,res)=>{
         return res.redirect('/login');
     }
 
-    const response=await axios.get('http://localhost:5000/api/users/profile',{
+    const response=await axios.get('/api/users/profile',{
         headers:{Authorization: `Bearer ${token}`},withCredentials:true}
     );
 

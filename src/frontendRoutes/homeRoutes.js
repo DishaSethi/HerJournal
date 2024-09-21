@@ -5,7 +5,7 @@ const Blog=require('../models/blog');
 const Comment=require('../models/comment');
 router.get('/',async (req,res)=>{
    try{
-   const response=await axios.get('http://localhost:5000/api/blogs',{
+   const response=await axios.get('/api/blogs',{
     params:req.query
    });
    const blogs=response.data;
@@ -23,7 +23,7 @@ router.get('/blogs/:id', async(req,res)=>{
     try{
         const token=req.cookies.token;
         // console.log('token :',token);
-        const response=await axios.get(`http://localhost:5000/api/blogs/${req.params.id}`,{withCredentials:true,  headers:{
+        const response=await axios.get(`/api/blogs/${req.params.id}`,{withCredentials:true,  headers:{
             Authorization:`Bearer ${token}`
         }});
         const {blog,user}=response.data;
@@ -46,7 +46,7 @@ router.post('/delete/:id',async(req,res)=>{
         const blogId=req.params.id;
         const token=req.cookies.token;
     // console.log(token);
-        const response=await axios.delete(`http://localhost:5000/api/blogs/${blogId}`,{
+        const response=await axios.delete(`/api/blogs/${blogId}`,{
             withCredentials:true,
             headers:{
                 Authorization:`Bearer ${token}`
@@ -76,13 +76,13 @@ router.get('/update/:id',async(req,res)=>{
         res.render('login');
     }
     try{
-        const response=await axios.get(`http://localhost:5000/api/blogs/${blogId}`,{
+        const response=await axios.get(`/api/blogs/${blogId}`,{
             withCredentials:true,
             headers:{
                 Authorization:`Bearer ${token}`
             }
     });
-    const tagResponse=await axios.get('http://localhost:5000/api/blogs/tags',{
+    const tagResponse=await axios.get('/api/blogs/tags',{
         headers:{Authorization:`Bearer ${token}`},
         withCredentials:true,
     })
@@ -106,7 +106,7 @@ try{
     const blogId=req.params.id;
     const token=req.cookies.token;
 
-    const response=await axios.put(`http://localhost:5000/api/blogs/${blogId}`,{
+    const response=await axios.put(`/api/blogs/${blogId}`,{
         title:req.body.title,
         content:req.body.content,
         tags:req.body.tags
