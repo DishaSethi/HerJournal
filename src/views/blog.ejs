@@ -120,7 +120,7 @@
         const blogId='<%= blog._id%>';
 
         try{
-            const response=await axios.post(`/api/comments/${blogId}`,{
+            const response=await axios.post(`http://localhost:5000/api/comments/${blogId}`,{
                 content:commentContent
             },{withCredentials:true});
 
