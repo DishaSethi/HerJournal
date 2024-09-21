@@ -5,3 +5,46 @@ width: 100%;
     justify-content:  center !important;
     align-items: center !important;
 }
+
+/* Tags Section Styling */
+.tags-list {
+    display: flex;
+    flex-wrap: wrap; /* Allows tags to wrap to the next line */
+    justify-content: center; /* Center the tags */
+    list-style: none; /* Remove default list styles */
+    padding: 0;
+    margin: 10px 0; /* Space around the tags */
+}
+
+.tags-list li {
+    margin: 5px; /* Space between tags */
+}
+
+.tags-list li a {
+    background-color: #00d1b2; /* Turquoise background for tags */
+    color: #ffffff; /* White text color */
+    padding: 8px 15px; /* Padding inside the tags */
+    border-radius: 20px; /* Rounded corners */
+    text-decoration: none; /* No underline */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Animation effects */
+    font-size: 0.9rem; /* Font size for tags */
+}
+
+.tags-list li a:hover {
+    background-color: #00b396; /* Slightly darker turquoise on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tags-list li a {
+        font-size: 0.8rem; /* Smaller font size on mobile */
+        padding: 6px 12px; /* Adjust padding on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .tags-list li a {
+        font-size: 0.7rem; /* Even smaller font size on smaller devices */
+    }
+}

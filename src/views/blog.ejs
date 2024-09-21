@@ -40,9 +40,9 @@
             <p><%= blog.content %></p>
 
         <p>Tags:</p>
-        <ul>
+        <ul class="tags-list">
             <% blog.tags.forEach(tag=>{%>
-                <li><%= tag%></li>
+                <li><a ><%= tag %></a></li>
                 <%})%>
         </ul>
         <form action="/delete/<%=blog._id %>" method="POST" id="delete-blog-form">
