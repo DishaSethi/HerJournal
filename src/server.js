@@ -76,6 +76,17 @@ app.use('/',homeRoutes);
 app.use('/',loginRoutes);
 app.use('/',profileRoutes);
 
+app.use((req,res,next)=>{
+    const err=new Error('Page Not Found');
+    err.status=404;
+    next(err);
+})
+
+
+app.use((err,req,res,next)=>{
+    res.status(err.status|| 500);
+    res.render('error',{error:err});
+})
 //Socket.io connection
 io.on('connection',(socket)=>{
     console.log('a user connected');

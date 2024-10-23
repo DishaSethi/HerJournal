@@ -3,9 +3,11 @@ const router=express.Router();
 const axios=require('axios');
 const Blog=require('../models/blog');
 const Comment=require('../models/comment');
+const apiUrl = process.env.API_URL || 'http://localhost:5000/api';
+
 router.get('/',async (req,res)=>{
    try{
-   const response=await axios.get('http://localhost:5000/api/blogs',{
+   const response=await axios.get(`${apiUrl}/blogs`,{
     params:req.query
    });
    const blogs=response.data;
@@ -23,7 +25,7 @@ router.get('/blogs/:id', async(req,res)=>{
     try{
         const token=req.cookies.token;
         // console.log('token :',token);
-        const response=await axios.get(`http://localhost:5000/api/blogs/${req.params.id}`,{withCredentials:true,  headers:{
+        const response=await axios.get(`${apiUrl}/blogs/${req.params.id}`,{withCredentials:true,  headers:{
             Authorization:`Bearer ${token}`
         }});
         const {blog,user}=response.data;
@@ -46,7 +48,7 @@ router.post('/delete/:id',async(req,res)=>{
         const blogId=req.params.id;
         const token=req.cookies.token;
     // console.log(token);
-        const response=await axios.delete(`http://localhost:5000/api/blogs/${blogId}`,{
+        const response=await axios.delete(`${apiUrl}/blogs/${blogId}`,{
             withCredentials:true,
             headers:{
                 Authorization:`Bearer ${token}`
@@ -62,7 +64,7 @@ router.post('/delete/:id',async(req,res)=>{
             res.render('blog',{error:'Failed to delete blog',blog:response.data.blog,isAuthenticated});
         }
     } catch (error){
-      console.log('Error deleting blog:',error);
+      console.error('Error deleting blog:',error);
       res.status(500).json({
         message:'Error deleting blog'
       });
@@ -76,13 +78,13 @@ router.get('/update/:id',async(req,res)=>{
         res.render('login');
     }
     try{
-        const response=await axios.get(`http://localhost:5000/api/blogs/${blogId}`,{
+        const response=await axios.get(`${apiUrl}/blogs/${blogId}`,{
             withCredentials:true,
             headers:{
                 Authorization:`Bearer ${token}`
             }
     });
-    const tagResponse=await axios.get('http://localhost:5000/api/blogs/tags',{
+    const tagResponse=await axios.get(`${apiUrl}/blogs/tags`,{
         headers:{Authorization:`Bearer ${token}`},
         withCredentials:true,
     })
@@ -106,7 +108,7 @@ try{
     const blogId=req.params.id;
     const token=req.cookies.token;
 
-    const response=await axios.put(`http://localhost:5000/api/blogs/${blogId}`,{
+    const response=await axios.put(`${apiUrl}/blogs/${blogId}`,{
         title:req.body.title,
         content:req.body.content,
         tags:req.body.tags

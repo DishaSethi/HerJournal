@@ -118,9 +118,11 @@
 
         const commentContent=document.getElementById('comment-content').value;
         const blogId='<%= blog._id%>';
+const apiUrl =  'http://localhost:5000/api';
+
 
         try{
-            const response=await axios.post(`http://localhost:5000/api/comments/${blogId}`,{
+            const response=await axios.post(`${apiUrl}/comments/${blogId}`,{
                 content:commentContent
             },{withCredentials:true});
 

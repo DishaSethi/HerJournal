@@ -2,6 +2,8 @@ const express=require('express');
 const router=express.Router();
 const axios=require('axios');
 const authMiddleware=require('../middlewares/authMiddleware');
+const apiUrl = process.env.API_URL || 'http://localhost:5000/api';
+
 
 router.get('/profile',async (req,res)=>{
  try{
@@ -12,7 +14,7 @@ router.get('/profile',async (req,res)=>{
         return res.redirect('/login');
     }
 
-    const response=await axios.get('http://localhost:5000/api/users/profile',{
+    const response=await axios.get(`${apiUrl}/users/profile`,{
         headers:{Authorization: `Bearer ${token}`},withCredentials:true}
     );
 
