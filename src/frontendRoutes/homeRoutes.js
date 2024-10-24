@@ -28,13 +28,17 @@ router.get('/blogs/:id', async(req,res)=>{
         const response=await axios.get(`${apiUrl}/blogs/${req.params.id}`,{withCredentials:true,  headers:{
             Authorization:`Bearer ${token}`
         }});
-        const {blog,user}=response.data;
+        const {blog,comments,user}=response.data;
         const isAuthenticated=req.cookies.token ? true: false;
 
-        const comments=await Comment.find({blog:req.params.id}).populate('user');
+        // const comments=await Comment.find({blog:req.params.id}).populate('user');
 
         console.log('Blog data:',blog);
         console.log('Comments:',comments);
+
+
+        // console.log("user id:",user);
+        console.log("author id:",blog.author._id);
         res.render('blog',{blog,user,comments,isAuthenticated});
     }catch(error){
         console.log(error);

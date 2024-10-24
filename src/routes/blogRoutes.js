@@ -27,7 +27,7 @@ router.get('/tags',(req,res)=>{
 })
 router.get('/',filterMiddleware.applyFilters,blogController.getAllBlogs);
 
-router.get('/:id',blogController.getBlogById);
+router.get('/:id',authMiddleware.authenticateUser,blogController.getBlogById);
 router.delete('/:id',authMiddleware.authenticateUser,checkBlogExists,blogController.deleteBlog);
 router.put('/:id',authMiddleware.authenticateUser,blogController.updateBlog);
 

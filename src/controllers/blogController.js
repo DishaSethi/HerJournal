@@ -25,6 +25,7 @@ const getBlogById=async (req,res)=>{
     try{
         // const filter=req.filter ||{};
         // const options=req.options||{};
+        console.log("user id ",req.user);
         const blog=await Blog.findById(req.params.id)
                     .populate('author','username')
                     .exec();
@@ -34,7 +35,8 @@ const comments=await Comment.find({blog:req.params.id}).populate('user','usernam
                 message:'Blog not found'
             });
         }
-        res.json({blog,comments});
+        const user=req.user;
+        res.json({blog,comments,user});
     }catch(error){
         console.log(error);
         res.status(500).json({

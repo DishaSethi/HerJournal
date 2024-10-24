@@ -45,13 +45,19 @@
                 <li><a ><%= tag %></a></li>
                 <%})%>
         </ul>
-        <form action="/delete/<%=blog._id %>" method="POST" id="delete-blog-form">
-    <button id="submit">Delete Blog</button>
-</form>
-        <form action="/update/<%=blog._id %>" method="GET" id="update-blog-form">
-    <button id="submit">Update Blog</button>
-</form>
-</div>
+    </div>
+    <% if (isAuthenticated && user && blog.author._id && (user.toString() === blog.author._id.toString())) { %>
+        <form action="/delete/<%= blog._id %>" method="POST" id="delete-blog-form">
+            <button id="submit">Delete Blog</button>
+        </form>
+        <form action="/update/<%= blog._id %>" method="GET" id="update-blog-form">
+            <button id="submit">Update Blog</button>
+        </form>
+    <% } %>
+    
+
+
+
 <h2>Comments</h2>
 
 <%if(isAuthenticated){ %>
