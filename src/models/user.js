@@ -14,7 +14,15 @@ const UserSchema=new Schema({
     password:{
         type:String,
         required:true
-    }
+    },
+    bio: { 
+        type: String, 
+        default: "" 
+    },
+    profilePicture: {
+         type: String,
+          default: "public/imgs/avatars/avatar1.png"
+         }
 });
 
 module.exports=mongoose.model('User',UserSchema);

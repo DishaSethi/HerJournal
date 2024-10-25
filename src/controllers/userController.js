@@ -27,7 +27,9 @@ const register=async(req,res)=>{
             
             username,
             email,
-            password:hashedPassword,});
+            password:hashedPassword,
+             bio:'',
+              profilePicture:'/public/imgs/avatar1.png'});
         await newUser.save();
         res.status(201).json({
             message:'User registered successfully'
@@ -120,7 +122,8 @@ const getUserProfile=async(req,res)=>{
         res.json({
             email:user.email,
             username:user.username,
-            blogs
+            blogs,
+            user
         });
     }catch (error){
         console.log(error);
@@ -150,11 +153,41 @@ const logout=async(req,res)=>{
     }
 };
 
+const updateUserProfile=async(req,res)=>{
+    try{
+        const userId=req.user;
+        const {email,bio,profilePicture}=req.body;
+
+        const updatedUser=await User.findByIdAndUpdate(
+            userId,
+            {
+                email:email,
+                bio:bio,
+                profilePicture:profilePicture
+            },
+            {new:true}
+        );
+
+        if(!updatedUser){
+            return res.status(404).json({message:'User not found'});
+        }
+        return res.status(200).json({message:'Profile updated successfully', user:updatedUser});
+     } catch(error){
+            console.error('Error updating user profile:',error)
+            res.status(500).json({message:'Server error'});
+        }
+
+
+        
+    }
+
+
 module.exports={
     register,
     login,
     getUserDetails,
     getUserProfile,
-    logout
+    logout,
+    updateUserProfile
     // getBlogsByUser
 };

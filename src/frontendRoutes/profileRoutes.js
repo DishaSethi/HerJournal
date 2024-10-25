@@ -18,9 +18,10 @@ router.get('/profile',async (req,res)=>{
         headers:{Authorization: `Bearer ${token}`},withCredentials:true}
     );
 
-    const {username,email,blogs}=response.data;
-
-    res.render('profile',{username, email,blogs});
+    const {username,email,blogs,user}=response.data;
+// const user=req.user;
+console.log("user",user);
+    res.render('profile',{username, email,blogs,user});
  }catch(error){
     console.log(error);
     res.status(500).json({message: 'Error loading profile'});

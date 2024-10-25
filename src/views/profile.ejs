@@ -6,6 +6,7 @@
     <title>Profile</title>
     <link rel="stylesheet" href="/styles/styles.css"> 
     <link rel="stylesheet" href="/styles/home.css"> 
+    <link rel="stylesheet" href="/styles/profile.css"> 
 </head>
 <body>
     <header>
@@ -23,8 +24,10 @@
                 <li><a href="/profile">Profile</a></li>
                 <li><a href="/create">Create Blog</a></li>
                 <li><button id="logout-button">Logout</button></li>
+                <li><button class="profile-tab-button" data-tab="update-profile">Update Profile</button></li>
             </ul>
         </nav>
+
         <h1>Welcome, <%= username%> !</h1>
         <form id="search" method="get" id="searchForm" action="/">
             <input id="search-input" type="text" name="keyword" placeholder="Search by keyword, author, tags">
@@ -32,20 +35,62 @@
             <input type="text" name="tags" placeholder="Search by tags"> -->
             <button type="submit">Search</button>
         </form>
+        
+        <div id="profile-tabs">
+            <button class="profile-tab-button " data-tab="profile">About</button>
+            <button class="profile-tab-button active" data-tab="blogs">Blogs</button>
+  
+        </div>
     </header>
 
     <main>
+
   
+<div class="tab " id="update-profile">
+    <h2> Update Profile</h2>
+        <section >
+   <!-- <h2>Your Profile Information</h2> -->
 
-        <section>
-            <!-- <h2>Your Profile</h2> -->
+   <form action="/profile/update" id="profile-update-form" method="POST">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" value="<%=user.email%>" required>
 
-            <!-- <p><%= username%></p> -->
+    <label for="bio">Bio:</label> 
+  <textarea name="bio" id="bio" placeholder="Tell something about yourself"><%=user.bio%> </textarea>
+
+  <h3>Select your Avatar</h3>
+  <div id="avatar-selection">
+    <img src="./public/imgs/avatars/avatar1.png" alt="Avatar1" onclick="selectAvatar('/public/imgs/avatars/avatar1.png')" />
+    <img src="./public/imgs/avatars/avatar2.png" alt="Avatar1" onclick="selectAvatar('/public/imgs/avatars/avatar2.png')" />
+    <img src="./public/imgs/avatars/avatar3.png" alt="Avatar1" onclick="selectAvatar('/public/imgs/avatars/avatar3.png')" />
+    <img src="./public/imgs/avatars/avatar4.png" alt="Avatar1" onclick="selectAvatar('/public/imgs/avatars/avatar4.png')" />
+  </div>
+
+  <input type="hidden" name="profilePicture" id="selected-avatar" value="<%= user.profilePicture || 'public/imgs/avatars/avatar1.png' %>">
+
+  <button type="submit" >Update Profile</button>
+   </form>
 
         </section>
+        </div>
 
+
+        <div class="tab " id="profile">
+            <section>
+                <!-- <h2>Your Info</h2> -->
+                <div class="profile-info">
+                    <img src="<%= user.profilePicture%> || './public/imgs/avatars/avatar1.png'%>" alt="Profile Picture">
+                    <p><strong>Username:</strong><%= user.username %></p>
+                  
+                    <p><strong>Bio:</strong><%= user.bio %></p>
+                </div>
+            </section>
+        </div>
+                <!-- <h2>Your Blogs</h2> -->
+
+    <div class="tab active" id="blogs">
         <section>
-            <h1>Your Blogs</h1>
+            <h1>Blogs</h1>
             <ul id="blogList">
                 <% blogs.forEach(blog=>{ %>
                <li>
@@ -57,9 +102,42 @@
              <% }); %>
             </ul>
         </section>
+    </div>
+    
+
 
         <script>
-                        
+
+// avatar selection logic
+function selectAvatar(avatarUrl){
+document.getElementById('selected-avatar').value=avatarUrl;
+const avatarImages=document.querySelectorAll('#avatar-selection img');
+avatarImages.forEach(img=> img.classList.remove('selected'));
+event.target.classList.add('selected');
+}
+
+
+// tab switching 
+
+const profileTabButtons=document.querySelectorAll('.profile-tab-button');
+const tabs=document.querySelectorAll('.tab');
+
+profileTabButtons.forEach(button=>{
+    button.addEventListener('click',function(){
+        
+
+        profileTabButtons.forEach(btn=> btn.classList.remove('active'));
+        tabs.forEach(tab=> tab.classList.remove('active'));
+
+        this.classList.add('active');
+        const activeTab=document.getElementById(this.dataset.tab);
+        activeTab.classList.add('active');
+
+    });
+});
+
+
+// Hamburger menu for mobile 
     const menuIcon=document.getElementById('menu-icon');
 
     const navLinks=document.getElementById('nav-links');
@@ -73,6 +151,8 @@
     navLinks.classList.remove('active');
     menuBackdrop.classList.remove('active');
     });
+
+// Main Navbar logout functionality
             function handleLogout(){
                 fetch('/logout',{method:'POST'})
                   .then(response=>{
