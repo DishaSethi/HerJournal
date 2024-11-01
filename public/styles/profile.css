@@ -1,0 +1,35 @@
+/* Styles for Profile Tabs (Tags/Buttons) */
+#profile-tabs {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#profile-tabs button {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#profile-tabs button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+#profile-tabs button:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Tab content hidden by default */
+.tab {
+    display: none;
+}
+
+/* Active tab content visible */
+.tab.active {
+    display: block;
+}

@@ -29,6 +29,26 @@ console.log("user",user);
 });
 
 
+router.post('/profile/update',async(req,res)=>{
+    try{
+        const token=req.cookies.token;
+
+        if(!token){
+            return res.redirect('/login');
+        }
+
+        const {email,bio,profilePicture}=req.body;
+
+        const response=await axios.put(`${apiUrl}/users/profile`,
+            {email,bio,profilePicture},
+            {headers:{Authorization: `Bearer ${token}`},withCredentials:true}
+        );
+        res.redirect('/profile');
+    }catch(error){
+        console.error('Error updating profile:',error);
+        res.status(500).json({message:'Error updating profile'});
+    }
+});
 
 
 

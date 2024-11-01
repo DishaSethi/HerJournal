@@ -53,3 +53,18 @@
         width: 100%; /* One card per line */
     }
 }
+
+#load-more-button{
+    padding: 10px 15px;
+    background-color: #00d1b2; /* Turquoise button */
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+}
+
+#load-more-button:hover{
+    background-color: #00b396;
+}

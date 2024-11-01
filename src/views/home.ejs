@@ -3,37 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home- Blog Platform</title>
+    <title>Home - Blog Platform</title>
     <link rel="stylesheet" href="/styles/styles.css"> 
     <link rel="stylesheet" href="/styles/home.css"> 
 </head>
 <body>
     <header>
         <nav>
-          <div class="menu-icon" id="menu-icon">
-            &#9776; 
-            <!-- Unicode for hamburger menu-icon -->
-          </div>
-
+          <div class="menu-icon" id="menu-icon">&#9776;</div>
           <div class="menu-backdrop" id="menu-backdrop"></div>
             <ul id="nav-links">
                 <li><a href="/">Home</a></li>
                 <li><a href="/profile">Profile</a></li>
                 <li><a href="/create">Create Blog</a></li>
-                <% if(isAuthenticated) {%>
-
+                <% if (isAuthenticated) { %>
                     <li><button id="logout-button">Logout</button></li>
-                <%} else { %>
-                <li><a href="/login">Login</a></li>
+                <% } else { %>
+                    <li><a href="/login">Login</a></li>
                 <% } %>
             </ul>
         </nav>
 
         <h1>Welcome to the blog platform</h1>
-        <form id="search" method="get" id="searchForm" action="/">
+        <form id="search" method="get" action="/">
             <input id="search-input" type="text" name="keyword" placeholder="Search by keyword, author, tags">
-            <!-- <input type="text" name="author" placeholder="Search by author">
-            <input type="text" name="tags" placeholder="Search by tags"> -->
             <button type="submit">Search</button>
         </form>
     </header>
@@ -41,62 +34,95 @@
     <main>
         <h1>Recent Blogs</h1>
         <ul id="blogList">
-            <% blogs.forEach(blog =>{ %>
+            <% blogs.forEach(blog => { %>
                 <li>
                     <h3><a href="/blogs/<%= blog._id %>"><%= blog.title %></a></h3>
-                    <p> By <%= blog.author.username %></p>
+                    <p>By <%= blog.author.username %></p>
                     <p>Tags:
-                        <% if(Array.isArray(blog.tags)&(blog.tags.length>0)){%>
-                         <%= blog.tags.join(', ') %>
-                         <%} else{%>
+                        <% if (Array.isArray(blog.tags) && blog.tags.length > 0) { %>
+                            <%= blog.tags.join(', ') %>
+                        <% } else { %>
                             No tags available
-                        <%}%>
+                        <% } %>
                     </p>
-                    <p><%= blog.content.substring(0,50) %>...</p>
-                    <a href="/blogs/<%= blog._id %>">Read More </a>
+                    <p><%= blog.content.substring(0, 50) %>...</p>
+                    <a href="/blogs/<%= blog._id %>">Read More</a>
                 </li>
-                <%}) %>
+            <% }) %>
         </ul>
-        <script>
-            
-const menuIcon=document.getElementById('menu-icon');
 
-    const navLinks=document.getElementById('nav-links');
-    const menuBackdrop = document.getElementById('menu-backdrop');
-    menuIcon.addEventListener('click',()=>{
-    navLinks.classList.toggle('active');
-    menuBackdrop.classList.toggle('active');
-})
-
-menuBackdrop.addEventListener('click',()=>{
-    navLinks.classList.remove('active');
-    menuBackdrop.classList.remove('active');
-});
-
-            function handleLogout(){
-                fetch('/logout',{method:'POST'})
-                  .then(response=>{
-                    if(response.ok){
-                        // console.log("logged out");
-                       
-                        // document.cookie = 'token=; Max-Age=0; path=/';
-                        window.location.href='/';
-                    }else{
-                        console.log('Logout failed');
-                    }
-                  })
-                  .catch(error=>{
-                    console.log('Error:',error);
-                  });
-            }
-
-            document.getElementById("logout-button").addEventListener('click',handleLogout);
-        </script>
+        <button id="load-more-button" >Load More</button>
     </main>
 
     <footer>
         <!-- <p>Made with love by Disha Sethi</p> -->
     </footer>
 
+    <script>
+        // Menu Toggle
+        const menuIcon = document.getElementById('menu-icon');
+        const navLinks = document.getElementById('nav-links');
+        const menuBackdrop = document.getElementById('menu-backdrop');
+
+        menuIcon.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            menuBackdrop.classList.toggle('active');
+        });
+
+        menuBackdrop.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            menuBackdrop.classList.remove('active');
+        });
+
+        // Variables for pagination
+        let currentPage = <%= (typeof currentPage !== 'undefined' ? currentPage : 1) %>;
+        const totalPages = <%= (typeof totalPages !== 'undefined' ? totalPages : 1) %>;
+
+        // Handle Load More
+        function handleLoadMore() {
+            currentPage++;
+
+            fetch(`/api/blogs?page=${currentPage}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { blogs } = data;
+                    const blogList = document.getElementById("blogList");
+
+                    blogs.forEach(blog => {
+                        const blogItem = document.createElement('li');
+                        blogItem.innerHTML = `
+                            <h3><a href="/blogs/${blog._id}">${blog.title}</a></h3>
+                            <p>By ${blog.author.username}</p>
+                            <p>Tags: ${Array.isArray(blog.tags) && blog.tags.length > 0 ? blog.tags.join(', ') : 'No tags available'}</p>
+                            <p>${blog.content.substring(0, 50)}...</p>
+                            <a href="/blogs/${blog._id}">Read More</a>
+                        `;
+                        blogList.appendChild(blogItem);
+                    });
+
+                    // Hide load more button if no more pages
+                    if (currentPage >= totalPages) {
+                        document.getElementById("load-more-button").style.display = 'none';
+                    }
+                })
+                .catch(error => console.error('Error loading more blogs:', error));
+        }
+
+        // Logout
+        function handleLogout() {
+            fetch('/logout', { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/';
+                    } else {
+                        console.log('Logout failed');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        document.getElementById("load-more-button").addEventListener('click', handleLoadMore);
+        document.getElementById("logout-button").addEventListener('click', handleLogout);
+    </script>
 </body>
 </html>

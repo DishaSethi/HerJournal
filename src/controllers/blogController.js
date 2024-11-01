@@ -4,15 +4,32 @@ const Comment=require('../models/comment');
 const getAllBlogs=async(req,res)=>{
     // console.log('getAllBlogs called');
     try{
+
+        const page =parseInt(req.query.page) ||1;
+        const limit=parseInt(req.query.limit) ||5;
+
+
         const filter=req.filter ||{};
         const options=req.options||{};
+
         const blogs=await Blog.find(filter)
              .sort(options.sort)
              .populate('author','username')
+             .skip((page-1)*limit)
+             .limit(limit)
              .exec();
    
             //  console.log('Blogs found',blogs.length);
-        res.status(200).json(blogs);
+const totalBlogs=await Blog.countDocuments(filter);
+console.log(totalBlogs);
+console.log(Math.ceil(totalBlogs/limit));
+
+        res.status(200).json({
+            blogs,
+            totalBlogs,
+            currentPage:page,
+            totalPages:Math.ceil(totalBlogs/limit)
+        });
     }catch(error){
         console.log(error);
         res.status(500).json({
@@ -48,6 +65,7 @@ const comments=await Comment.find({blog:req.params.id}).populate('user','usernam
 const createBlog=async(req,res)=>{
 
     console.log('Request Body:', req.body);
+
     const {title,content,tags}=req.body;
 if(!title || !content){
     return res.status(400).json({message:'Title and content required'});

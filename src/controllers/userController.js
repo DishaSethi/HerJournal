@@ -29,7 +29,7 @@ const register=async(req,res)=>{
             email,
             password:hashedPassword,
              bio:'',
-              profilePicture:'/public/imgs/avatar1.png'});
+              profilePicture:'/public/imgs/avatars/avatar1.png'});
         await newUser.save();
         res.status(201).json({
             message:'User registered successfully'
