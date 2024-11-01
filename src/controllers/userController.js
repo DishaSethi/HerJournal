@@ -117,7 +117,8 @@ const getUserProfile=async(req,res)=>{
             })
         }
 
-        const blogs=await blog.find({author: userId});
+        const blogs = await blog.find({ author: userId }).sort({ createdAt: -1 });
+
 
         res.json({
             email:user.email,
@@ -128,7 +129,7 @@ const getUserProfile=async(req,res)=>{
     }catch (error){
         console.log(error);
         res.status(500).json({
-            message:'Server error'
+            message:error.message
         });
     }
 }

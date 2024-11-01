@@ -1,34 +1,58 @@
 const Blog=require('../models/blog');
 const {BlogTagsEnum}=require('../utils/common/enums');
 const Comment=require('../models/comment');
+const User=require('../models/user');
 const getAllBlogs=async(req,res)=>{
     // console.log('getAllBlogs called');
     try{
 
         const page =parseInt(req.query.page) ||1;
         const limit=parseInt(req.query.limit) ||5;
+        const keyword=req.query.keyword || '';
 
 
-        const filter=req.filter ||{};
+        const filter=keyword?{
+            $or:[
+                {title:{$regex:keyword,$options:'i'}},
+                {content:{$regex:keyword,$options:'i'}},
+                {tags:{$regex:keyword,$options:'i'}}
+            ]
+        } :{};
+
         const options=req.options||{};
 
-        const blogs=await Blog.find(filter)
-             .sort(options.sort)
-             .populate('author','username')
-             .skip((page-1)*limit)
-             .limit(limit)
-             .exec();
-   
+      
+   if(keyword){
+    const matchingAuthors=await User.find({
+        username:{$regex:keyword,$options:'i'}
+    }).select('_id');
+    const authorIds=matchingAuthors.map(author=>author._id);   
+if(authorIds.length>0){
+
+   filter.$or.push({author:{$in:authorIds}});
+   }}
+
+  
+   const totalBlogs=await Blog.countDocuments(filter);
+   const blogs=await Blog.find(filter)
+   .sort({createdAt:-1})
+   .populate('author','username')
+   .skip((page-1)*limit)
+   .limit(limit)
+   .exec();
             //  console.log('Blogs found',blogs.length);
-const totalBlogs=await Blog.countDocuments(filter);
+
+const totalPages=Math.ceil(totalBlogs/limit);
+
 console.log(totalBlogs);
 console.log(Math.ceil(totalBlogs/limit));
-
+console.log(blogs);
         res.status(200).json({
             blogs,
             totalBlogs,
             currentPage:page,
-            totalPages:Math.ceil(totalBlogs/limit)
+            totalPages,
+          
         });
     }catch(error){
         console.log(error);

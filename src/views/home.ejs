@@ -26,7 +26,7 @@
 
         <h1>Welcome to the blog platform</h1>
         <form id="search" method="get" action="/">
-            <input id="search-input" type="text" name="keyword" placeholder="Search by keyword, author, tags">
+            <input id="search-input" type="text" name="keyword" value="<%= keyword ? keyword : ''%>" placeholder="Search by keyword, author, tags">
             <button type="submit">Search</button>
         </form>
     </header>
@@ -51,7 +51,16 @@
             <% }) %>
         </ul>
 
+        <!-- <div>
+            <% for(let i=1;i<=totalPages;i++){%>
+                <a href="/?page=<%= i %>&limit=5<%= keyword ? '&keyword=' + encodeURIComponent(keyword) : '' %>">
+                    <%= i%>
+                </a>
+                <%}%>
+        </div> -->
+        <%if (currentPage< totalPages){%>
         <button id="load-more-button" >Load More</button>
+        <%}%>
     </main>
 
     <footer>
@@ -80,9 +89,10 @@
 
         // Handle Load More
         function handleLoadMore() {
+            const searchKeyword = document.getElementById("search-input").value;
             currentPage++;
 
-            fetch(`/api/blogs?page=${currentPage}`)
+            fetch(`/api/blogs?page=${currentPage}&limit=5&keyword=${encodeURIComponent(searchKeyword)}`)
                 .then(response => response.json())
                 .then(data => {
                     const { blogs } = data;
@@ -101,12 +111,14 @@
                     });
 
                     // Hide load more button if no more pages
-                    if (currentPage >= totalPages) {
+                    if (currentPage>=totalPages) {
                         document.getElementById("load-more-button").style.display = 'none';
                     }
                 })
                 .catch(error => console.error('Error loading more blogs:', error));
         }
+
+        
 
         // Logout
         function handleLogout() {

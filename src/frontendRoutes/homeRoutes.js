@@ -8,14 +8,16 @@ const apiUrl = process.env.API_URL || 'http://localhost:5000/api';
 router.get('/',async (req,res)=>{
    try{
    const response=await axios.get(`${apiUrl}/blogs`,{
-    params:{page:parseInt(req.query.page)||1,limit:5}
+    params:{page:parseInt(req.query.page)||1,limit:5,
+        keyword:req.query.keyword||''
+    }
    });
 
    const {blogs,totalBlogs,currentPage,totalPages}=response.data;
 
    
    const isAuthenticated=req.cookies.token ? true: false;
-   res.render('home',{blogs,totalBlogs,isAuthenticated,currentPage,totalPages});
+   res.render('home',{blogs,totalBlogs,isAuthenticated,currentPage,totalPages, keyword: req.query.keyword || ''});
    } catch (error){
     console.log(error);
     res.status(500).json({
