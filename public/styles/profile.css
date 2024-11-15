@@ -24,6 +24,16 @@
     color: white;
 }
 
+.profile-tab-button{
+    padding: 10px 15px;
+    background-color: #00d1b2; /* Turquoise button */
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
 /* Tab content hidden by default */
 .tab {
     display: none;
