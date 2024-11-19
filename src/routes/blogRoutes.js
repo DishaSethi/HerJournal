@@ -14,6 +14,10 @@ const BlogTagsEnum=require('../utils/common/enums');
 //     LIFESTYLE: 'Lifestyle',
 //     HEALTH: 'Health',
 // });
+
+// Public route to access individual blog without logging in.
+router .get('/public/:id',checkBlogExists,blogController.getBlogByIdPublic);
+
 router.post('/create',authMiddleware.authenticateUser,blogController.createBlog);
 router.get('/tags',(req,res)=>{
     try {
@@ -25,6 +29,7 @@ router.get('/tags',(req,res)=>{
         res.status(500).json({ message: 'Internal Server Error' });
     }
 })
+
 router.get('/',filterMiddleware.applyFilters,blogController.getAllBlogs);
 
 router.get('/:id',authMiddleware.authenticateUser,blogController.getBlogById);

@@ -62,6 +62,20 @@ console.log(blogs);
     }
 };
 
+const getBlogByIdPublic=async(req,res)=>{
+    try{
+        const blog=await Blog.findById(req.params.id)
+                    .populate('author','username')
+                    .exec();
+         const comments=await Comment.find({blog:req.params.id}).populate('user','username');
+        res.status(200).json({blog,comments});
+    }catch(error){
+        console.log(error);
+        res.status(500).json({
+            message:error.message
+        });
+    }
+}
 const getBlogById=async (req,res)=>{
     try{
         // const filter=req.filter ||{};
@@ -85,6 +99,7 @@ const comments=await Comment.find({blog:req.params.id}).populate('user','usernam
         });
     }
 };
+
 
 const createBlog=async(req,res)=>{
 
@@ -282,6 +297,7 @@ module.exports={
     createBlog,
     deleteBlog,
     updateBlog,
+    getBlogByIdPublic
     // getBlogsByUser,
     // getBlogsByTag
 }

@@ -36,7 +36,7 @@
         <ul id="blogList">
             <% blogs.forEach(blog => { %>
                 <li>
-                    <h3><a href="/blogs/<%= blog._id %>"><%= blog.title %></a></h3>
+                    <h3><a href=""><%= blog.title %></a></h3>
                     <p>By <%= blog.author.username %></p>
                     <p>Tags:
                         <% if (Array.isArray(blog.tags) && blog.tags.length > 0) { %>
@@ -46,7 +46,8 @@
                         <% } %>
                     </p>
                     <p><%= blog.content.substring(0, 50) %>...</p>
-                    <a href="/blogs/<%= blog._id %>">Read More</a>
+                    <a href="<%=isAuthenticated ? `/blogs/${blog._id}` : `/blogs/public/${blog._id}` %>">Read More </a>
+                    <!-- <a href="<%= `/blogs/${blog._id}` %>">Read More (Authenticated)</a> -->
                 </li>
             <% }) %>
         </ul>

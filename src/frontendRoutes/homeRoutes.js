@@ -17,6 +17,7 @@ router.get('/',async (req,res)=>{
 
    
    const isAuthenticated=req.cookies.token ? true: false;
+   console.log(isAuthenticated);
    res.render('home',{blogs,totalBlogs,isAuthenticated,currentPage,totalPages, keyword: req.query.keyword || ''});
    } catch (error){
     console.log(error);
@@ -25,7 +26,18 @@ router.get('/',async (req,res)=>{
     });
    }
 });
+router.get('/blogs/public/:id',async(req,res)=>{
+    try{
+        const response =await axios.get(`${apiUrl}/blogs/public/${req.params.id}`);
+        console.log('Blog details:',response.data);
+        const {blog,comments}=response.data;
+        const isAuthenticated=false;
+        res.render('blog',{blog,comments,isAuthenticated});
 
+    }catch(error){
+        console.error('Error fetching blog',error);
+    }
+})
 router.get('/blogs/:id', async(req,res)=>{
     try{
         const token=req.cookies.token;
