@@ -122,20 +122,31 @@
         
 
         // Logout
-        function handleLogout() {
-            fetch('/logout', { method: 'POST' })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.href = '/';
-                    } else {
-                        console.log('Logout failed');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
+       
+        
+        // Main Navbar logout functionality
+        const logoutButton = document.getElementById("logout-button");
+
+if (logoutButton) {
+    logoutButton.addEventListener('click', () => {
+        fetch('/logout', { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/';
+                } else {
+                    console.log('Logout failed');
+                }
+            })
+            .catch(error => {
+                console.log('Error:', error);
+            });
+    });
+}
+
+            // document.getElementById("logout-button").addEventListener('click',handleLogout);
 
         document.getElementById("load-more-button").addEventListener('click', handleLoadMore);
-        document.getElementById("logout-button").addEventListener('click', handleLogout);
+        // document.getElementById("logout-button").addEventListener('click', handleLogout);
     </script>
 </body>
 </html>
