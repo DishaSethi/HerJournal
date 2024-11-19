@@ -49,7 +49,7 @@ app.use(session({
     secret:'your_secret_key',
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: 'mongodb://localhost:27017/blog-platform' }),
+    store: MongoStore.create({ mongoUrl:  process.env.MONGODB_URI }),
     cookie: { secure:process.env.NODE_ENV==='production',httpOnly:true,sameSite:'lax' } // Set to true in production
 }));
 

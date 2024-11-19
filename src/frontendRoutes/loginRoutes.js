@@ -59,29 +59,28 @@ if (token) {
 
 
 router.post('/logout',async(req,res)=>{
-try{
-    const token=req.cookies.token;
-    const response=await axios.post(`${apiUrl}/users/logout`,{},{
-        withCredentials:true,
-        headers:{
-            Authorization:`Bearer ${token}`
-        }
+    try{
+        const token=req.cookies.token;
+        const response=await axios.post(`${apiUrl}/users/logout`,{},{
+            withCredentials:true,
+            headers:{
+                Authorization:`Bearer ${token}`
+            }
+        });
+    
+        res.clearCookie('token', { path: '/' });
+        console.log('Logout response:',response.data);
+    
+        res.status(200).json({
+            message: 'Logged out successfully'
+        });
+    }catch(error){
+        console.log('Logout Error:',error);
+        res.status(500).json({
+            message:'Logout failed'
+        });
+    }
     });
-
-    res.clearCookie('token', { path: '/' });
-    console.log('Logout response:',response.data);
-
-    res.status(200).json({
-        message: 'Logged out successfully'
-    });
-}catch(error){
-    console.log('Logout Error:',error);
-    res.status(500).json({
-        message:'Logout failed'
-    });
-}
-});
-
 
 
 router.get('/create', async (req, res) => {

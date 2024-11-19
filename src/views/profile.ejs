@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/styles/styles.css"> 
     <link rel="stylesheet" href="/styles/home.css"> 
     <link rel="stylesheet" href="/styles/profile.css"> 
+    
 </head>
 <body>
     <header>
@@ -62,13 +63,13 @@
 
   <h3>Select your Avatar</h3>
   <div id="avatar-selection">
-    <img src="./public/imgs/avatars/avatar1.png" alt="Avatar1" onclick="selectAvatar('/public/imgs/avatars/avatar1.png')" />
-    <img src="./public/imgs/avatars/avatar2.png" alt="Avatar1" onclick="selectAvatar('/public/imgs/avatars/avatar2.png')" />
-    <img src="./public/imgs/avatars/avatar3.png" alt="Avatar1" onclick="selectAvatar('/public/imgs/avatars/avatar3.png')" />
-    <img src="./public/imgs/avatars/avatar4.png" alt="Avatar1" onclick="selectAvatar('/public/imgs/avatars/avatar4.png')" />
+    <img src="./public/imgs/avatars/avatar1.png" alt="Avatar1" onclick="selectAvatar('/public/imgs/avatars/avatar1.png') "/>
+    <img src="./public/imgs/avatars/avatar2.png" alt="Avatar2" onclick="selectAvatar('/public/imgs/avatars/avatar2.png')" />
+    <img src="./public/imgs/avatars/avatar3.png" alt="Avatar3" onclick="selectAvatar('/public/imgs/avatars/avatar3.png')" />
+    <img src="./public/imgs/avatars/avatar4.png" alt="Avatar4" onclick="selectAvatar('/public/imgs/avatars/avatar4.png')" />
   </div>
 
-  <input type="hidden" name="profilePicture" id="selected-avatar" value="<%= user.profilePicture || 'public/imgs/avatars/avatar1.png' %>">
+  <input type="hidden" name="profilePicture" id="selected-avatar" value="<%= user.profilePicture  %>">
 
   <button type="submit" >Update Profile</button>
    </form>
@@ -81,7 +82,7 @@
             <section>
                 <!-- <h2>Your Info</h2> -->
                 <div class="profile-info">
-                    <img src="<%= user.profilePicture%> || './public/imgs/avatars/avatar1.png'%>" alt="Profile Picture">
+                    <img src="<%= user.profilePicture%> " alt="Profile Picture">
                     <p><strong>Username:</strong><%= user.username %></p>
                   
                     <p><strong>Bio:</strong><%= user.bio %></p>
