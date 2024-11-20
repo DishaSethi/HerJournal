@@ -5,14 +5,14 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const jwt = require('jsonwebtoken');
 const { BlogTagsEnum } = require('../utils/common/enums');
-const apiUrl = process.env.API_URL || 'http://localhost:5000/api';
+const apiUrl = process.env.API_URL ;
 
 
 router.use(session({
     secret: 'your_secret_key',
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: 'mongodb://localhost:27017/blog-platform' }),
+    store: MongoStore.create({ mongoUrl:  process.env.MONGODB_URI }),
     cookie: { secure: process.env.NODE_ENV === 'production' } // Set to true in production
 }));
 
