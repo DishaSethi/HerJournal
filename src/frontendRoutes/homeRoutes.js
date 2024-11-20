@@ -7,6 +7,7 @@ const apiUrl = process.env.API_URL ;
 
 router.get('/',async (req,res)=>{
    try{
+    // console.log('API_URL2:',process.env.API_URL2);
    const response=await axios.get(`${apiUrl}/blogs`,{
     params:{page:parseInt(req.query.page)||1,limit:5,
         keyword:req.query.keyword||''
@@ -31,6 +32,7 @@ router.get('/blogs/public/:id',async(req,res)=>{
         const response =await axios.get(`${apiUrl}/blogs/public/${req.params.id}`);
         console.log('Blog details:',response.data);
         const {blog,comments}=response.data;
+
         const isAuthenticated=false;
         res.render('blog',{blog,comments,isAuthenticated});
 

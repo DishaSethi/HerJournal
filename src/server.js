@@ -26,6 +26,8 @@ connectDB();
 const app = express();
 const server=http.createServer(app);
 const io=  socketIo(server);
+app.locals.API_URL = process.env.API_URL ;
+app.locals.API_URL2 = process.env.API_URL2 ;
 
 app.set('io',io);
 //Middleware
@@ -104,6 +106,8 @@ socket.on('disconnect',()=>{
 });
 // socket.emit('testEvent',{message:'Hello from server!'});
     // handle disconnection
+
+
  
  console.log(process.env.MONGODB_URI);
 const PORT=process.env.PORT||5000;

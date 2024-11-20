@@ -6,6 +6,7 @@ const MongoStore = require('connect-mongo');
 const jwt = require('jsonwebtoken');
 const { BlogTagsEnum } = require('../utils/common/enums');
 const apiUrl = process.env.API_URL ;
+const apiUrl2 = process.env.API_URL2 ;
 
 
 router.use(session({
@@ -101,7 +102,8 @@ router.get('/create', async (req, res) => {
             })
             console.log("tagsResponse:",tagResponse.data);
             const allowedTags=tagResponse.data;
-            res.render('create',{allowedTags});
+            
+            res.render('create',{allowedTags,apiUrl2:process.env.API_URL2});
         } catch (err) {
             console.error('Token verification failed:', err);
             res.redirect('/login'); // Redirect to login if token verification fails
