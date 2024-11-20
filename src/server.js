@@ -1,4 +1,4 @@
-require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -7,6 +7,7 @@ const MongoStore = require('connect-mongo');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const path = require('path');
+require('dotenv').config({path:path.resolve(__dirname,'../.env')});
 const http=require('http');
 const socketIo=require('socket.io');
 // const Blog=require('./models/blog');
@@ -104,6 +105,6 @@ socket.on('disconnect',()=>{
 // socket.emit('testEvent',{message:'Hello from server!'});
     // handle disconnection
  
-
-const PORT=process.env.PORT||5000;
+ console.log(process.env.MONGODB_URI);
+const PORT=process.env.PORT;
 server.listen(PORT,()=> console.log(`Server running on port ${PORT} `));

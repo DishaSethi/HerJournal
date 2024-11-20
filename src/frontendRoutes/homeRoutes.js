@@ -3,7 +3,7 @@ const router=express.Router();
 const axios=require('axios');
 const Blog=require('../models/blog');
 const Comment=require('../models/comment');
-const apiUrl = process.env.API_URL || 'http://localhost:5000/api';
+const apiUrl = process.env.API_URL ;
 
 router.get('/',async (req,res)=>{
    try{
