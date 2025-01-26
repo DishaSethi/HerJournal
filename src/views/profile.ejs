@@ -31,8 +31,7 @@
         <div id="profile-tabs">
             <button class="profile-tab-button active" data-tab="profile">About</button>
             <button class="profile-tab-button" data-tab="blogs">Blogs</button>
-            <button class="profile-tab-button" data-tab="followers">Followers</button>
-            <button class="profile-tab-button" data-tab="following">Following</button>
+          
             <% if (isSelf) { %>
                 <button class="profile-tab-button" data-tab="update-profile">Update Profile</button>
             <% } else { %>
@@ -45,6 +44,10 @@
 
                 <% } %>
         </div>
+        <div id="profile-tabs">
+        <button class="profile-tab-button" data-tab="followers">Followers</button>
+        <button class="profile-tab-button" data-tab="following">Following</button>
+    </div>
 
         <div class="tab active" id="profile">
             <section>

@@ -3,6 +3,8 @@
     display: flex;
     justify-content: center;
     margin-top: 20px;
+    /* Allow buttons to wrap into multiple lines if necessary */
+    gap: 10px; /* Space between the buttons */
 }
 
 #profile-tabs button {
@@ -10,9 +12,9 @@
     color: black;
     border: none;
     padding: 10px 20px;
-    margin-right: 10px;
     cursor: pointer;
     border-radius: 5px;
+    white-space: nowrap; /* Prevent text from wrapping inside buttons */
 }
 
 #profile-tabs button.active {
@@ -25,7 +27,7 @@
     color: black;
 }
 
-.profile-tab-button{
+.profile-tab-button {
     padding: 10px 15px;
     background-color: #00d1b2; /* Turquoise button */
     border: none;
@@ -45,38 +47,36 @@
     display: block;
 }
 
-#avatar-selection{
-
+#avatar-selection {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* Two avatars per row */
     gap: 20px; /* Space between avatars */
     padding: 20px; /* Padding around the grid */
     justify-items: center; /* Center the avatars horizontally */
     align-items: center; /* Center the avatars vertically */
-  
-  
-
 }
-.select-img{
+
+/* Select image styles */
+.select-img {
     width: 150px;
     height: 150px;
     overflow: hidden;
     border: 2px solid #ccc;
     border-radius: 50%;
     transition: border-color 0.3s ease-in-out;
-    
 }
-.select-img:hover{
-    border-color:#007bff;
+
+.select-img:hover {
+    border-color: #007bff;
     cursor: pointer;
 }
 
-.select-img.selected{
+.select-img.selected {
     border: 3px solid #007bff;
     box-shadow: 0 0 10px #007bff;
 }
 
-.select-img1{
+.select-img1 {
     width: 150px;
     height: 150px;
     display: flex;
@@ -86,20 +86,22 @@
     border: 2px solid #ccc;
     border-radius: 50%;
     transition: border-color 0.3s ease-in-out;
-   position: relative;
-    
+    position: relative;
 }
 
-#followers-list , #following-list{
+/* Followers and Following lists */
+#followers-list,
+#following-list {
     list-style: none;
     padding: 20px;
     margin: 0;
     display: flex;
     flex-direction: column;
-     gap: 15px; 
-
+    gap: 15px;
 }
-#followers-list li, #following-list li{
+
+#followers-list li,
+#following-list li {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -108,14 +110,44 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease;
-
 }
-#followers-list li:hover, #following-list li:hover{
+
+#followers-list li:hover,
+#following-list li:hover {
     transform: scale(1.01);
 }
-.followers h2, .following h2{
+
+.followers h2,
+.following h2 {
     margin: 20px 30px 10px 30px;
     display: flex;
     justify-content: center;
     text-align: center;
+}
+
+/* Responsive styles for phone view */
+@media screen and (max-width: 768px) {
+    /* Adjust profile tabs for mobile view */
+    #profile-tabs button {
+        padding: 8px 15px; /* Reduce padding */
+        font-size: 0.9em; /* Reduce font size */
+    }
+
+    /* Adjust avatar selection grid layout */
+    #avatar-selection {
+        grid-template-columns: 1fr; /* One avatar per row on smaller screens */
+    }
+
+    /* Adjust followers/following list */
+    #followers-list li,
+    #following-list li {
+        flex-direction: column; /* Stack the items vertically */
+        align-items: flex-start; /* Align items to the left */
+    }
+
+    /* Adjust heading margin */
+    .followers h2,
+    .following h2 {
+        margin: 20px 0;
+    }
 }
