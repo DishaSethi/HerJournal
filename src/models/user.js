@@ -21,8 +21,11 @@ const UserSchema=new Schema({
     },
     profilePicture: {
          type: String,
-          default: "public/imgs/avatars/avatar1.png"
-         }
+        default: "/imgs/avatars/avatar1.png"
+         },
+
+    followers:[{type:mongoose.Schema.Types.ObjectId, ref:'User'}],
+    following:[{type:mongoose.Schema.Types.ObjectId,ref:'User'}]
 });
 
 module.exports=mongoose.model('User',UserSchema);

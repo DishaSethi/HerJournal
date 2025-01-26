@@ -6,7 +6,8 @@
 }
 
 #profile-tabs button {
-    background-color: #f0f0f0;
+    background-color: #d4d3d3;
+    color: black;
     border: none;
     padding: 10px 20px;
     margin-right: 10px;
@@ -16,12 +17,12 @@
 
 #profile-tabs button.active {
     background-color: #007bff;
-    color: white;
+    color: black;
 }
 
 #profile-tabs button:hover {
     background-color: #007bff;
-    color: white;
+    color: black;
 }
 
 .profile-tab-button{
@@ -42,4 +43,79 @@
 /* Active tab content visible */
 .tab.active {
     display: block;
+}
+
+#avatar-selection{
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two avatars per row */
+    gap: 20px; /* Space between avatars */
+    padding: 20px; /* Padding around the grid */
+    justify-items: center; /* Center the avatars horizontally */
+    align-items: center; /* Center the avatars vertically */
+  
+  
+
+}
+.select-img{
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    transition: border-color 0.3s ease-in-out;
+    
+}
+.select-img:hover{
+    border-color:#007bff;
+    cursor: pointer;
+}
+
+.select-img.selected{
+    border: 3px solid #007bff;
+    box-shadow: 0 0 10px #007bff;
+}
+
+.select-img1{
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    transition: border-color 0.3s ease-in-out;
+   position: relative;
+    
+}
+
+#followers-list , #following-list{
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+     gap: 15px; 
+
+}
+#followers-list li, #following-list li{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+
+}
+#followers-list li:hover, #following-list li:hover{
+    transform: scale(1.01);
+}
+.followers h2, .following h2{
+    margin: 20px 30px 10px 30px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
 }

@@ -19,7 +19,18 @@ const authenticateUser=(req,res,next)=>{
     console.log("Decoded user:",req.user);
     next();
  }catch (error){
-    console.log(error);
+    
+    if(error.name==='TokenExpiredError'){
+        res.clearCookie('token',{
+            httpOnly:true,
+            secure: process.env.NODE_ENV==='production',
+        });
+        return res.staus(401).json({
+            message:'Session expired, please log in again'
+        });
+    }
+        console.log(error);
+
     res.status(401).json({
         message:'Token is not valid'
     });

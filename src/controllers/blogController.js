@@ -9,29 +9,53 @@ const getAllBlogs=async(req,res)=>{
         const page =parseInt(req.query.page) ||1;
         const limit=parseInt(req.query.limit) ||5;
         const keyword=req.query.keyword || '';
+        const searchType = req.query.searchType;
+
+        const filter={};
+        let profiles=[];
 
 
-        const filter=keyword?{
-            $or:[
-                {title:{$regex:keyword,$options:'i'}},
-                {content:{$regex:keyword,$options:'i'}},
-                {tags:{$regex:keyword,$options:'i'}}
-            ]
-        } :{};
+        if(keyword){
+            if(searchType==='profile'){
+               profiles=await User.find({
+                    username:{$regex:keyword,$options:'i'}
+                }).select('_id username');
+                
 
-        const options=req.options||{};
+               return res.status(200).json({
+                profiles,
+                message:`Found ${profiles.length} profiles matching "${keyword}"`
+               });
+            }else {
+                filter.$or = [
+                  
+                    { title: { $regex: keyword, $options: 'i' } },
+                    { content: { $regex: keyword, $options: 'i' } },
+                    { tags: { $regex: keyword, $options: 'i' } }
+                ];
+
+                if(keyword){
+                    const matchingAuthors=await User.find({
+                        username:{$regex:keyword,$options:'i'}
+                    }).select('_id');
+                    const authorIds=matchingAuthors.map(author=>author._id);   
+                if(authorIds.length>0){
+                
+                   filter.$or.push({author:{$in:authorIds}});
+                   }}
+                
+            
+        }
+
+
+       
+          
+
+        
 
       
-   if(keyword){
-    const matchingAuthors=await User.find({
-        username:{$regex:keyword,$options:'i'}
-    }).select('_id');
-    const authorIds=matchingAuthors.map(author=>author._id);   
-if(authorIds.length>0){
-
-   filter.$or.push({author:{$in:authorIds}});
-   }}
-
+  
+    }
   
    const totalBlogs=await Blog.countDocuments(filter);
    const blogs=await Blog.find(filter)

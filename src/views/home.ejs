@@ -26,46 +26,54 @@
 
         <h1>Welcome to the blog platform</h1>
         <form id="search" method="get" action="/">
-            <input id="search-input" type="text" name="keyword" value="<%= keyword ? keyword : ''%>" placeholder="Search by keyword, author, tags">
+            <input id="search-input" type="text" name="keyword" value="<%- keyword ? keyword : '' %>" placeholder="Search by keyword, author, tags, or username">
+            <select id="search-type" name="searchType">
+                <option value="blog" <%= searchType === 'blog' ? 'selected' : '' %>>Blogs</option>
+                <option value="profile" <%= searchType === 'profile' ? 'selected' : '' %>>Profiles</option>
+            </select>
             <button type="submit">Search</button>
         </form>
     </header>
 
     <main>
-        <h1>Recent Blogs</h1>
-        <ul id="blogList">
-            <% blogs.forEach(blog => { %>
-                <li>
-                    <h3><a href=""><%= blog.title %></a></h3>
-                    <p>By <%= blog.author.username %></p>
-                    <p>Tags:
-                        <% if (Array.isArray(blog.tags) && blog.tags.length > 0) { %>
-                            <%= blog.tags.join(', ') %>
-                        <% } else { %>
-                            No tags available
-                        <% } %>
-                    </p>
-                    <p><%= blog.content.substring(0, 50) %>...</p>
-                    <a href="<%=isAuthenticated ? `/blogs/${blog._id}` : `/blogs/public/${blog._id}` %>">Read More </a>
-                    <!-- <a href="<%= `/blogs/${blog._id}` %>">Read More (Authenticated)</a> -->
-                </li>
-            <% }) %>
-        </ul>
+        <% if (searchType === 'profile') { %>
+            <h1>Matching Profiles</h1>
+            <ul id="profileList">
+                <% profiles.forEach(profile => { %>
+                    <li>
+                        <p> <%= profile.username %></p>
+                        <a href="/profile/view/<%= profile._id %>">View Profile</a>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <h1>Recent Blogs</h1>
+            <ul id="blogList">
+                <% blogs.forEach(blog => { %>
+                    <li>
+                        <h3><a href="<%= `/blogs/${blog._id}` %>"><%= blog.title %></a></h3>
+                        <p>By <%= blog.author.username %></p>
+                        <p>Tags:
+                            <% if (Array.isArray(blog.tags) && blog.tags.length > 0) { %>
+                                <%= blog.tags.join(', ') %>
+                            <% } else { %>
+                                No tags available
+                            <% } %>
+                        </p>
+                        <p><%= blog.content.substring(0, 50) %>...</p>
+                        <a href="<%= isAuthenticated ? `/blogs/${blog._id}` : `/blogs/public/${blog._id}` %>">Read More</a>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } %>
 
-        <!-- <div>
-            <% for(let i=1;i<=totalPages;i++){%>
-                <a href="/?page=<%= i %>&limit=5<%= keyword ? '&keyword=' + encodeURIComponent(keyword) : '' %>">
-                    <%= i%>
-                </a>
-                <%}%>
-        </div> -->
-        <%if (currentPage< totalPages){%>
-        <button id="load-more-button" >Load More</button>
-        <%}%>
+        <% if (currentPage < totalPages) { %>
+            <button id="load-more-button">Load More</button>
+        <% } %>
     </main>
 
     <footer>
-        <!-- <p>Made with love by Disha Sethi</p> -->
+        <p>Made with love by Disha Sethi</p>
     </footer>
 
     <script>
@@ -85,68 +93,73 @@
         });
 
         // Variables for pagination
-        let currentPage = <%= (typeof currentPage !== 'undefined' ? currentPage : 1) %>;
-        const totalPages = <%= (typeof totalPages !== 'undefined' ? totalPages : 1) %>;
+        let currentPage = <%- JSON.stringify(currentPage || 1) %>;
+        const totalPages = <%- JSON.stringify(totalPages || 1) %>;
 
         // Handle Load More
         function handleLoadMore() {
             const searchKeyword = document.getElementById("search-input").value;
+            const searchType = document.querySelector('select[name="searchType"]').value || 'blog'; 
             currentPage++;
 
-            fetch(`/api/blogs?page=${currentPage}&limit=5&keyword=${encodeURIComponent(searchKeyword)}`)
+            fetch(`/api/${searchType}s?page=${currentPage}&limit=5&keyword=${encodeURIComponent(searchKeyword)}`)
                 .then(response => response.json())
                 .then(data => {
-                    const { blogs } = data;
-                    const blogList = document.getElementById("blogList");
-
-                    blogs.forEach(blog => {
-                        const blogItem = document.createElement('li');
-                        blogItem.innerHTML = `
-                            <h3><a href="/blogs/${blog._id}">${blog.title}</a></h3>
-                            <p>By ${blog.author.username}</p>
-                            <p>Tags: ${Array.isArray(blog.tags) && blog.tags.length > 0 ? blog.tags.join(', ') : 'No tags available'}</p>
-                            <p>${blog.content.substring(0, 50)}...</p>
-                            <a href="/blogs/${blog._id}">Read More</a>
-                        `;
-                        blogList.appendChild(blogItem);
-                    });
+                    if (searchType === 'profile') {
+                        const { profiles } = data;
+                        const profileList = document.getElementById("profileList");
+                        profiles.forEach(profile => {
+                            const profileItem = document.createElement('li');
+                            profileItem.innerHTML = `
+                                <p><strong>Username:</strong> ${profile.username}</p>
+                                <a href="/profile/view/${profile._id}">View Profile</a>
+                            `;
+                            profileList.appendChild(profileItem);
+                        });
+                    } else {
+                        const { blogs } = data;
+                        const blogList = document.getElementById("blogList");
+                        blogs.forEach(blog => {
+                            const blogItem = document.createElement('li');
+                            blogItem.innerHTML = `
+                                <h3><a href="/blogs/${blog._id}">${blog.title}</a></h3>
+                                <p>By ${blog.author.username}</p>
+                                <p>Tags: ${Array.isArray(blog.tags) && blog.tags.length > 0 ? blog.tags.join(', ') : 'No tags available'}</p>
+                                <p>${blog.content.substring(0, 50)}...</p>
+                                <a href="/blogs/${blog._id}">Read More</a>
+                            `;
+                            blogList.appendChild(blogItem);
+                        });
+                    }
 
                     // Hide load more button if no more pages
-                    if (currentPage>=totalPages) {
+                    if (currentPage >= totalPages) {
                         document.getElementById("load-more-button").style.display = 'none';
                     }
                 })
                 .catch(error => console.error('Error loading more blogs:', error));
         }
 
-        
-
         // Logout
-       
-        
-        // Main Navbar logout functionality
         const logoutButton = document.getElementById("logout-button");
-
-if (logoutButton) {
-    logoutButton.addEventListener('click', () => {
-        fetch('/logout', { method: 'POST' })
-            .then(response => {
-                if (response.ok) {
-                    window.location.href = '/';
-                } else {
-                    console.log('Logout failed');
-                }
-            })
-            .catch(error => {
-                console.log('Error:', error);
+        if (logoutButton) {
+            logoutButton.addEventListener('click', () => {
+                fetch('/logout', { method: 'POST' })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = '/';
+                        } else {
+                            console.error('Logout failed');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
             });
-    });
-}
+        }
 
-            // document.getElementById("logout-button").addEventListener('click',handleLogout);
-
-        document.getElementById("load-more-button").addEventListener('click', handleLoadMore);
-        // document.getElementById("logout-button").addEventListener('click', handleLogout);
+        const loadMoreButton = document.getElementById("load-more-button");
+        if (loadMoreButton) {
+            loadMoreButton.addEventListener('click', handleLoadMore);
+        }
     </script>
 </body>
 </html>

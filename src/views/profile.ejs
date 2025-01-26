@@ -4,108 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
-    <link rel="stylesheet" href="/styles/styles.css"> 
-    <link rel="stylesheet" href="/styles/home.css"> 
-    <link rel="stylesheet" href="/styles/profile.css"> 
-    
+    <link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="/styles/home.css">
+    <link rel="stylesheet" href="/styles/profile.css">
 </head>
 <body>
     <header>
         <nav>
-         
-                <div class="menu-icon" id="menu-icon">
-                  &#9776; 
-                  <!-- Unicode for hamburger menu-icon -->
-                </div>
-      
-                <div class="menu-backdrop" id="menu-backdrop"></div>
-      
+            <div class="menu-icon" id="menu-icon">&#9776;</div>
+            <div class="menu-backdrop" id="menu-backdrop"></div>
             <ul id="nav-links">
                 <li><a href="/">Home</a></li>
                 <li><a href="/profile">Profile</a></li>
-                <li><a href="/create">Create Blog</a></li>
+                <% if (isSelf) { %>
+                    <li><a href="/create">Create Blog</a></li>
+                <% } %>
                 <li><button id="logout-button">Logout</button></li>
-                <li><button class="profile-tab-button" data-tab="update-profile">Update Profile</button></li>
             </ul>
         </nav>
+        <h1> <%=isSelf ? 'Welcome! ':''%>  <%=username %></h1>
 
-      
-        
-        <h1>Welcome, <%= username%> !</h1>
-        <form id="search" method="get" id="searchForm" action="/">
-            <input id="search-input" type="text" name="keyword" placeholder="Search by keyword, author, tags">
-            <!-- <input type="text" name="author" placeholder="Search by author">
-            <input type="text" name="tags" placeholder="Search by tags"> -->
-            <button type="submit">Search</button>
-        </form>
-      
-        <div id="profile-tabs">
-            <button class="profile-tab-button " data-tab="profile">About</button>
-            <button class="profile-tab-button active" data-tab="blogs">Blogs</button>
-  
-        </div>
     </header>
 
     <main>
 
-  
-<div class="tab " id="update-profile">
-    <h2> Update Profile</h2>
-        <section >
-   <!-- <h2>Your Profile Information</h2> -->
+        <div id="profile-tabs">
+            <button class="profile-tab-button active" data-tab="profile">About</button>
+            <button class="profile-tab-button" data-tab="blogs">Blogs</button>
+            <button class="profile-tab-button" data-tab="followers">Followers</button>
+            <button class="profile-tab-button" data-tab="following">Following</button>
+            <% if (isSelf) { %>
+                <button class="profile-tab-button" data-tab="update-profile">Update Profile</button>
+            <% } else { %>
+                <!-- Button to Follow or Unfollow the user -->
+                <button id="follow-btn" data-user-id="<%=user._id%>" data-followed="false">    <%= isFollowing ? 'Unfollow' : 'Follow' %></button>
 
-   <form action="/profile/update" id="profile-update-form" method="POST">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" value="<%=user.email%>" required>
 
-    <label for="bio">Bio:</label> 
-  <textarea name="bio" id="bio" placeholder="Tell something about yourself"><%=user.bio%> </textarea>
 
-  <h3>Select your Avatar</h3>
-  <div id="avatar-selection">
-    <img src="./public/imgs/avatars/avatar1.png" alt="Avatar1" onclick="selectAvatar('/public/imgs/avatars/avatar1.png') "/>
-    <img src="./public/imgs/avatars/avatar2.png" alt="Avatar2" onclick="selectAvatar('/public/imgs/avatars/avatar2.png')" />
-    <img src="./public/imgs/avatars/avatar3.png" alt="Avatar3" onclick="selectAvatar('/public/imgs/avatars/avatar3.png')" />
-    <img src="./public/imgs/avatars/avatar4.png" alt="Avatar4" onclick="selectAvatar('/public/imgs/avatars/avatar4.png')" />
-  </div>
+                <!-- <button class="follow-button" data-user-id="<%= user._id %>" id="follow-button" onclick="toggleFollow('<%= user._id %>')">Follow</button> -->
 
-  <input type="hidden" name="profilePicture" id="selected-avatar" value="<%= user.profilePicture  %>">
-
-  <button type="submit" >Update Profile</button>
-   </form>
-
-        </section>
+                <% } %>
         </div>
 
-
-        <div class="tab " id="profile">
+        <div class="tab active" id="profile">
             <section>
-                <!-- <h2>Your Info</h2> -->
                 <div class="profile-info">
-                    <img src="<%= user.profilePicture%> " alt="Profile Picture">
-                    <p><strong>Username:</strong><%= user.username %></p>
-                  
-                    <p><strong>Bio:</strong><%= user.bio %></p>
+        <img class="select-img1" src="<%=user.profilePicture %>" alt="Profile Picture">
+
+                    <p><strong>Username:</strong> <%= username %></p>
+                    <p><strong>Bio:</strong> <%= bio %></p>
                 </div>
             </section>
         </div>
-                <!-- <h2>Your Blogs</h2> -->
 
-    <div class="tab active" id="blogs">
-        <section>
-            <h1>Blogs</h1>
-            <ul id="blogList">
-                <% blogs.forEach(blog=>{ %>
-               <li>
-                <h3><a href="/blogs/<%= blog._id %>"><%= blog.title %></a></h3>
-                <!-- <p><%= blog.content.substring(0,100)%>...</p> -->
-                <p><%= blog.content.substring(0,100) %>...</p>
-                <a href="/blogs/<%= blog._id %>">Read More </a>
-               </li>
-             <% }); %>
-            </ul>
-        </section>
-    </div>
+        <div class="tab" id="blogs">
+            <section>
+                <h2>Blogs</h2>
+                <ul id="blogList">
+                    <% blogs.forEach(blog => { %>
+                        <li>
+                            <h3><a href="/blogs/<%= blog._id %>"><%= blog.title %></a></h3>
+                            
+                            <p>Tags:
+                                <% if (Array.isArray(blog.tags) && blog.tags.length > 0) { %>
+                                    <%= blog.tags.join(', ') %>
+                                <% } else { %>
+                                    No tags available
+                                <% } %>
+                            </p>
+                            <p><%= blog.content.substring(0, 100) %>...</p>
+                            <a href="<%= `/blogs/${blog._id}` %>">Read More</a>
+                        </li>
+                        
+                    <% }); %>
+                </ul>
+            </section>
+        </div>
+
+        <div class="tab" id="followers">
+            <section class="followers">
+                <h2>Followers</h2>
+                <ul id="followers-list">
+                    <!-- <% user.followers.forEach(follower => { %>
+                        <li>
+                            <p><%= follower%></p>
+                            <% if (isSelf) { %>
+                                <button onclick="unfollowUser('<%= follower._id %>')">Unfollow</button>
+                            <% } %>
+                        </li>
+                    <% }); %> -->
+                </ul>
+            </section>
+        </div>
+
+        <div class="tab" id="following">
+            <section class="following">
+                <h2>Following</h2>
+                <ul id="following-list">
+                    <!-- <% user.following.forEach(followed => { %>
+                        <li>
+                            <p><%= followed.username %></p>
+                        </li>
+                    <% }); %> -->
+                </ul>
+            </section>
+        </div>
+
+        <% if (isSelf) { %>
+            <div class="tab" id="update-profile">
+                <section>
+                    <form action="/profile/update" method="POST">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" value="<%= user.email %>" required>
+
+                        <label for="bio">Bio:</label>
+                        <textarea name="bio" id="bio" placeholder="Tell something about yourself"><%= user.bio %></textarea>
+
+                        <h3>Select Avatar</h3>
+                        <div id="avatar-selection">
+                            <% for (let i = 1; i <= 4; i++) { %>
+                                <img src="/imgs/avatars/avatar<%= i %>.png" alt="Avatar <%= i %>" class="select-img" onclick="selectAvatar('/imgs/avatars/avatar<%= i %>.png')">
+                            <% } %>
+                        </div>
+                        <input type="hidden" id="selected-avatar" name="profilePicture">
+                        <button type="submit">Update Profile</button>
+                    </form>
+                </section>
+            </div>
+        <% } %>
+    </main>
+
+
+
     
 
 
@@ -138,6 +168,130 @@ profileTabButtons.forEach(button=>{
 
     });
 });
+
+// Follow and unfollow logic
+// Follow and unfollow logic
+document.addEventListener("DOMContentLoaded", () => {
+    const followButton = document.getElementById("follow-btn");
+
+    followButton.addEventListener("click", async () => {
+        const userId = followButton.getAttribute("data-user-id");
+        const isFollowed = followButton.getAttribute("data-followed") === "true";
+
+        // Define the API endpoint based on the current follow state
+        const endpoint = isFollowed 
+            ? `/profile/unfollow/${userId}` 
+            : `/profile/follow/${userId}`;
+
+        try {
+            const response = await fetch(endpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include", // Include cookies for authentication
+            });
+
+            // Check if the request was successful
+            console.log(response);
+            if (response.ok) {
+                // Update button text and state based on the new follow status
+                followButton.setAttribute("data-followed", !isFollowed);
+                followButton.textContent = isFollowed ? "Follow" : "Unfollow";
+
+                await fetchFollowers(userId);
+            } else {
+                // Handle error if the response is not successful
+                const errorData = await response.json();
+                console.error("Error:", errorData.error || "Unknown error occurred");
+                alert(errorData.error || "An error occurred while processing your request.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again later.");
+        }
+    });
+});
+
+         
+
+
+// Function to handle following a user
+function followUser(userId) {
+    fetch(`/profile/follow/${userId}`, { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            // console.log(response);
+
+            if (response.success) {
+                // const followButton = document.getElementById("follow-button");
+                
+                // followButton.textContent = "Unfollow"; // Change text to "Unfollow"
+                // followButton.onclick = () => unfollowUser(userId); // Update the handler to unfollow
+                alert('User followed successfully');
+            } else {
+                alert('Failed to follow user');
+            }
+        })
+        .catch(error => console.error("Error", error));
+}
+
+// Function to handle unfollowing a user
+function unfollowUser(userId) {
+    fetch(`/profile/unfollow/${userId}`, { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // const followButton = document.getElementById("follow-button");
+                // followButton.textContent = "Follow"; // Change text to "Follow"
+                // followButton.onclick = () => followUser(userId); // Update the handler to follow
+                alert('User unfollowed successfully');
+            } else {
+                alert('Failed to unfollow user');
+            }
+        })
+        .catch(error => console.error("Error", error));
+}
+
+
+
+// Fetch followers and display usernames
+async function fetchFollowers(userId) {
+    try {
+        const response = await fetch(`/profile/${userId}/followers`);
+        const data = await response.json();
+
+        const followersList = document.getElementById('followers-list');
+        const followingList = document.getElementById('following-list');
+
+        // Clear previous entries
+        followersList.innerHTML = '';
+        followingList.innerHTML = '';
+
+        // Populate followers list
+        data.followers.forEach(follower => {
+            const listItem = document.createElement('li');
+            listItem.textContent = follower;
+            followersList.appendChild(listItem);
+
+            
+        });
+
+        // Populate following list
+        data.followings.forEach(following => {
+            const listItem = document.createElement('li');
+            listItem.textContent = following;
+            followingList.appendChild(listItem);
+            
+            
+        });
+    } catch (error) {
+        console.error('Error fetching followers:', error);
+    }
+}
+
+// Call the function on page load (replace 'userId' with the actual user ID variable)
+fetchFollowers('<%=user._id%>');
 
 
 // Hamburger menu for mobile 

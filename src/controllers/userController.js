@@ -109,7 +109,7 @@ const getUserProfile=async(req,res)=>{
     try{
         const userId=req.user;
         console.log("User id:", userId);
-        const user=await User.findById(userId).select('-password');
+        const user = await User.findById(req.user);
 
         if(!user){
             return res.status(404).json({
@@ -124,7 +124,8 @@ const getUserProfile=async(req,res)=>{
             email:user.email,
             username:user.username,
             blogs,
-            user
+            user,
+            
         });
     }catch (error){
         console.log(error);
@@ -146,7 +147,7 @@ const logout=async(req,res)=>{
         });
         
     }catch(error){
-        console.log('Logout Error:',error);
+        // console.log('Logout Error:',error);
         res.status(500).json({
             message:'Logout failed'
         });
@@ -184,12 +185,136 @@ const updateUserProfile=async(req,res)=>{
     }
 
 
+    const followUser = async (req, res) => {
+        try {
+            const userIdToFollow = req.params.userId; // Ensure this is defined
+            console.log('User ID to follow:', userIdToFollow);
+    
+            const userToFollow = await User.findById(userIdToFollow);
+            if (!userToFollow) {
+                return res.status(404).json({ message: 'User to follow not found' });
+            }
+    
+            const currentUser = await User.findById(req.user);
+            console.log(`currentUser ${currentUser}`); // Assuming req.user is set by middleware
+            if (!currentUser) {
+                return res.status(404).json({ message: 'Current user not found' });
+            }
+    
+            // Add follow logic here
+            if (!currentUser.following.includes(userIdToFollow)) {
+                currentUser.following.push(userIdToFollow);
+                userToFollow.followers.push(req.user);
+    
+                await currentUser.save();
+                await userToFollow.save();
+            }
+    
+            res.status(200).json({ message: 'User followed successfully' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    };
+    
+
+    const unfollowUser = async (req, res) => {
+        try {
+            const userIdToUnfollow = req.params.userId; // User to unfollow
+            console.log('User ID to unfollow:', userIdToUnfollow);
+    
+            const userToUnfollow = await User.findById(userIdToUnfollow);
+            if (!userToUnfollow) {
+                return res.status(404).json({ message: 'User to unfollow not found' });
+            }
+    
+            const currentUser = await User.findById(req.user); // Assuming `req.user` is set by middleware
+            if (!currentUser) {
+                return res.status(404).json({ message: 'Current user not found' });
+            }
+    
+            // Check if the current user is actually following the user to unfollow
+            if (!currentUser.following.includes(userIdToUnfollow)) {
+                return res.status(400).json({ message: 'You are not following this user' });
+            }
+    
+            // Remove the user from the following list of the current user
+            currentUser.following = currentUser.following.filter(
+                (id) => id.toString() !== userToUnfollow._id.toString()
+            );
+    
+            // Remove the current user from the followers list of the user to unfollow
+            userToUnfollow.followers = userToUnfollow.followers.filter(
+                (id) => id.toString() !== currentUser._id.toString()
+            );
+    
+            // Save the changes to both users
+            await currentUser.save();
+            await userToUnfollow.save();
+    
+            return res.status(200).json({ success: true, message: 'User unfollowed successfully' });
+        } catch (error) {
+            console.error('Error during unfollow:', error);
+            res.status(500).json({ message: 'Server error', error });
+        }
+    };
+    
+      
+
+   
+const getProfileById=async(req,res)=>{
+    try{
+        const userId=req.params.id;
+
+        const user=await User.findById(userId).select('-password');
+        if(!user){
+            return res.status(404).json({message:'User not found'});
+        }
+
+        const blogs=await blog.find({author:userId}).sort({createdAt:-1});
+
+        res.status(200).json({
+            user,
+            username:user.username,
+            email:user.email,
+            bio:user.bio,
+            profilePicture:user.profilePicture,
+            blogs,
+
+        });
+    }catch(error){
+        console.error('Error fetching user profile:',error);
+        res.status(500).json({message:'Server error'});
+    }
+}
+
+
+const getfollowers=async(req,res)=>{
+    try {
+        const user = await User.findById(req.params.id)
+                    .populate('followers', 'username')
+                    .populate('following','username');
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json({ followers: user.followers, followings:user.following });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
 module.exports={
     register,
     login,
     getUserDetails,
     getUserProfile,
     logout,
-    updateUserProfile
+    updateUserProfile,
+    followUser,
+    unfollowUser,
+    getProfileById,
+    getfollowers
     // getBlogsByUser
 };

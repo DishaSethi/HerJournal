@@ -5,28 +5,57 @@ const Blog=require('../models/blog');
 const Comment=require('../models/comment');
 const apiUrl = process.env.API_URL ;
 
-router.get('/',async (req,res)=>{
-   try{
-    // console.log('API_URL2:',process.env.API_URL2);
-   const response=await axios.get(`${apiUrl}/blogs`,{
-    params:{page:parseInt(req.query.page)||1,limit:5,
-        keyword:req.query.keyword||''
+router.get('/', async (req, res) => {
+    try {
+        const searchType = req.query.searchType || 'blog'; // Default to 'blog'
+        const keyword = req.query.keyword || '';
+        const page = parseInt(req.query.page) || 1;
+        const limit = 5;
+
+        // Call the appropriate backend API based on the searchType
+        const response = await axios.get(`${apiUrl}/blogs`, {
+            params: {
+                page,
+                limit,
+                keyword,
+                searchType,
+            },
+        });
+
+        let blogs = [];
+        let profiles = [];
+        let totalItems = 0;
+        let totalPages = 0;
+        let currentPage = 1;
+
+        if (searchType === 'profile') {
+            profiles = response.data.profiles;
+            totalItems = profiles.length; // Backend doesn't paginate profiles in this case
+        } else {
+            blogs = response.data.blogs;
+            totalItems = response.data.totalBlogs;
+            totalPages = response.data.totalPages;
+            currentPage = response.data.currentPage;
+        }
+
+        const isAuthenticated = req.cookies.token ? true : false;
+
+        res.render('home', {
+            searchType,
+            blogs,
+            profiles,
+            totalItems,
+            totalPages,
+            currentPage,
+            isAuthenticated,
+            keyword,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message });
     }
-   });
-
-   const {blogs,totalBlogs,currentPage,totalPages}=response.data;
-
-   
-   const isAuthenticated=req.cookies.token ? true: false;
-   console.log(isAuthenticated);
-   res.render('home',{blogs,totalBlogs,isAuthenticated,currentPage,totalPages, keyword: req.query.keyword || ''});
-   } catch (error){
-    console.log(error);
-    res.status(500).json({
-        message:error.message
-    });
-   }
 });
+
 router.get('/blogs/public/:id',async(req,res)=>{
     try{
         const response =await axios.get(`${apiUrl}/blogs/public/${req.params.id}`);

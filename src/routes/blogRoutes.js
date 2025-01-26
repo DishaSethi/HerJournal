@@ -16,7 +16,7 @@ const BlogTagsEnum=require('../utils/common/enums');
 // });
 
 // Public route to access individual blog without logging in.
-router .get('/public/:id',checkBlogExists,blogController.getBlogByIdPublic);
+router.get('/public/:id',checkBlogExists,blogController.getBlogByIdPublic);
 
 router.post('/create',authMiddleware.authenticateUser,blogController.createBlog);
 router.get('/tags',(req,res)=>{

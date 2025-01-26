@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const { BlogTagsEnum } = require('../utils/common/enums');
 const apiUrl = process.env.API_URL ;
 const apiUrl2 = process.env.API_URL2 ;
-
+const axiosInstance= require('../../public/scripts/axiosConfig');
 
 router.use(session({
     secret: 'your_secret_key',
@@ -57,6 +57,8 @@ if (token) {
         });
     }
 });
+
+
 
 
 router.post('/logout',async(req,res)=>{

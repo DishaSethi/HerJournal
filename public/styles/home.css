@@ -68,3 +68,55 @@
 #load-more-button:hover{
     background-color: #00b396;
 }
+
+#profileList {
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between profile items */
+}
+
+#profileList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#profileList li p {
+    margin: 0;
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#profileList li a {
+    text-decoration: none;
+    background-color: #40e0d0;
+    color: white;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+#profileList li a:hover {
+    background-color: #00b396;
+}
+
+@media screen and (max-width: 768px) {
+    #profileList li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    #profileList li a {
+        align-self: flex-end;
+    }
+}
