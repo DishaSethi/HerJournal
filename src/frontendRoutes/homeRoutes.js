@@ -38,7 +38,9 @@ router.get('/', async (req, res) => {
             currentPage = response.data.currentPage;
         }
 
-        const isAuthenticated = req.cookies.token ? true : false;
+        const isAuthenticated =!(req.cookies.token)?false:true;
+            
+        
 
         res.render('home', {
             searchType,
@@ -58,29 +60,37 @@ router.get('/', async (req, res) => {
 
 router.get('/blogs/public/:id',async(req,res)=>{
     try{
-        const response =await axios.get(`${apiUrl}/blogs/public/${req.params.id}`);
+        const response=await axios.get(`${apiUrl}/blogs/public/${req.params.id}`);
+        
         console.log('Blog details:',response.data);
         const {blog,comments}=response.data;
+        const isAuthenticated= false;
+        console.log(isAuthenticated);
 
-        const isAuthenticated=false;
+
+    
         res.render('blog',{blog,comments,isAuthenticated});
 
     }catch(error){
+        console.log(error);
         console.error('Error fetching blog',error);
     }
 })
 router.get('/blogs/:id', async(req,res)=>{
     try{
         const token=req.cookies.token;
-        // console.log('token :',token);
+        console.log('token :',token);
         const response=await axios.get(`${apiUrl}/blogs/${req.params.id}`,{withCredentials:true,  headers:{
             Authorization:`Bearer ${token}`
         }});
         const {blog,comments,user}=response.data;
         const isAuthenticated=req.cookies.token ? true: false;
-
+        if (!isAuthenticated ) {
+            // Redirect to the public blog view if the user is not logged in
+            return res.redirect(`/blogs/public/${blog._id}`);
+        }
         // const comments=await Comment.find({blog:req.params.id}).populate('user');
-
+        console.log(isAuthenticated);
         console.log('Blog data:',blog);
         console.log('Comments:',comments);
 
