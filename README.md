@@ -1,19 +1,22 @@
-My major goal of this project was to learn implementing REST APIs , Sockets, JWT Cookies-based authentication by building backend and learning to call APIs from the Frontend using Axios.
-All of this has been achieved so far, currently I am working on some minor changes left and Frontend UI and adding additional feautures. An ongoing Blog Platform project where:
- Features: 
- 1.Create, Read, Update, Delete a blog 
- 2. Authorization and Authentication 
-3. Real-Time Commenting System.
+<h1 align="center" id="title">Blog-Plaform</h1>
 
-Tech Stack Used: 
-Frontend :
-HTML CSS JS EJS 
-Backend: 
-NODE JS EXPRESS JS MONGO DB 
-Real time Commenting System: 
-Sockets 
-Authentication/ Authorization:
- JWT
+<p id="description">A full-stack blog platform built with the  MEN stack with EJS featuring CRUD operations, JWT authentication, real-time commenting and optimized performance with pagination and search functionality.</p>
 
- To start the project inside "src" folder do "npx nodemon server.js"
+<h2>🚀 Demo</h2>
 
+[https://blog-platform-1-vssh.onrender.com/](https://blog-platform-1-vssh.onrender.com/)
+
+  
+  
+<h2>💻 Built with</h2>
+
+Technologies used in the project:
+
+*   HTML
+*   CSS
+*   JS
+*   EJS
+*   Socket.IO
+*   Express JS
+*   Node JS
+*   MongoDB
