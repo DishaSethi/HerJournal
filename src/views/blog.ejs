@@ -17,9 +17,9 @@
   
             <div class="menu-backdrop" id="menu-backdrop"></div>
               <ul id="nav-links">
-                  <li><a href="/">Home</a></li>
-                  <li><a href="/profile">Profile</a></li>
-                  <li><a href="/create">Create Blog</a></li>
+                  <li><a href="/">Wellness Feed</a></li>
+                  <li><a href="/profile">My Wellness Space</a></li>
+                  <li><a href="/create">Create Reflection</a></li>
                   <% if(isAuthenticated) {%>
   
                       <li><button id="logout-button">Logout</button></li>
@@ -48,10 +48,10 @@
     </div>
     <% if (isAuthenticated && user && blog.author._id && (user.toString() === blog.author._id.toString())) { %>
         <form action="/delete/<%= blog._id %>" method="POST" id="delete-blog-form">
-            <button id="submit">Delete Blog</button>
+            <button id="submit">Delete </button>
         </form>
         <form action="/update/<%= blog._id %>" method="GET" id="update-blog-form">
-            <button id="submit">Update Blog</button>
+            <button id="submit">Update </button>
         </form>
     <% } %>
     

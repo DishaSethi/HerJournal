@@ -2,7 +2,7 @@ const express=require('express');
 const router=express.Router();
 const axios=require('axios');
 const authMiddleware=require('../middlewares/authMiddleware');
-const apiUrl = process.env.API_URL || 'http://localhost:5000/api';
+const apiUrl = process.env.API_URL || 'http://localhost:3000/api';
 
 
 router.get('/profile', async (req, res) => {

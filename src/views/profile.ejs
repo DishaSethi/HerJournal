@@ -14,10 +14,10 @@
             <div class="menu-icon" id="menu-icon">&#9776;</div>
             <div class="menu-backdrop" id="menu-backdrop"></div>
             <ul id="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/profile">Profile</a></li>
+                <li><a href="/">Wellness Feed</a></li>
+                <li><a href="/profile">My Wellness Space</a></li>
                 <% if (isSelf) { %>
-                    <li><a href="/create">Create Blog</a></li>
+                    <li><a href="/create">Create Reflection</a></li>
                 <% } %>
                 <li><button id="logout-button">Logout</button></li>
             </ul>
@@ -30,7 +30,7 @@
 
         <div id="profile-tabs">
             <button class="profile-tab-button active" data-tab="profile">About</button>
-            <button class="profile-tab-button" data-tab="blogs">Blogs</button>
+            <button class="profile-tab-button" data-tab="blogs">Reflections</button>
           
             <% if (isSelf) { %>
                 <button class="profile-tab-button" data-tab="update-profile">Update Profile</button>
@@ -62,7 +62,7 @@
 
         <div class="tab" id="blogs">
             <section>
-                <h2>Blogs</h2>
+                <h2>Reflections</h2>
                 <ul id="blogList">
                     <% blogs.forEach(blog => { %>
                         <li>
@@ -72,7 +72,7 @@
                                 <% if (Array.isArray(blog.tags) && blog.tags.length > 0) { %>
                                     <%= blog.tags.join(', ') %>
                                 <% } else { %>
-                                    No tags available
+                                    No moods available
                                 <% } %>
                             </p>
                             <p><%= blog.content.substring(0, 100) %>...</p>

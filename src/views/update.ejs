@@ -3,103 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Blog</title>
+    <title>Update Reflection</title>
+
+    <!-- Include Select2 CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Your custom CSS -->
     <link rel="stylesheet" href="/styles/styles.css"> 
     <link rel="stylesheet" href="/styles/create.css"> 
 </head>
 <body>
-
     <header>
         <nav>
-      
-                <div class="menu-icon" id="menu-icon">
-                  &#9776; 
-                  <!-- Unicode for hamburger menu-icon -->
-                </div>
-      
-                <div class="menu-backdrop" id="menu-backdrop"></div>
-                  
+            <div class="menu-icon" id="menu-icon">&#9776;</div>
+            <div class="menu-backdrop" id="menu-backdrop"></div>
             <ul id="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/profile">Profile</a></li>
-                <li><a href="/create">Create Blog</a></li>
-                <li><button  id="logout-button" >Logout</button></li>
+                <li><a href="/">Wellness Feed</a></li>
+                <li><a href="/profile">My Wellness Space</a></li>
+                <li><a href="/create">Create Reflection</a></li>
+                <li><button id="logout-button">Logout</button></li>
             </ul>
         </nav>
     </header>
+
     <main>
-        <h1>Update Blog</h1>
-    <form id="update-blog-form" action="/update/<%=blog.blog._id%>" method="POST">
-        <label for="title">Title:</label>
-        <input type="text" name="title" id="title" value="<%= blog.blog.title %>" required>
-        <label for="content">Content:</label>
-        <textarea name="content" id="content" value="<%=blog.content%>" required><%= blog.blog.content %></textarea>
+        <h1>Update Reflection</h1>
+        <form id="update-blog-form" action="/update/<%= blog.blog._id %>" method="POST">
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title" value="<%= blog.blog.title %>" required> <br><br>
 
-        <label for="tags">Select Tags (Max 5)</label>
-        <select name="tags" id="tags" multiple>
-            <% allowedTags.forEach(tag=>{ %>
-                <option value="<%= tag %>" <%=  blog.blog.tags.includes(tag) ? 'selected' : '' %>><%= tag %></option>
-            <%})%>
-        </select>
-        
-        <button type="submit">Update Blog</button>
-    </form>
-</main>
-    <!-- <script src="/scripts/upd"></script> -->
+            <label for="content">Content:</label>
+            <textarea name="content" id="content" rows="10" required><%= blog.blog.content %></textarea> <br><br>
+
+            <label for="tags">Select Moods (Max 5)</label>
+            <select name="tags[]" id="tags" multiple="multiple" required>
+                <% allowedTags.forEach(tag => { %>
+                    <option value="<%= tag %>" <%= blog.blog.tags.includes(tag) ? 'selected' : '' %>><%= tag %></option>
+                <% }) %>
+            </select> <br><br>
+
+            <button type="submit">Update</button>
+        </form>
+    </main>
+
+    <footer>
+        <p>Made with love by Disha Sethi</p>
+    </footer>
+
+    <!-- jQuery & Select2 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script>
+        // Initialize Select2 for tags
+        $(document).ready(function() {
+            $('#tags').select2({
+                maximumSelectionLength: 5,
+                placeholder: "Select up to 5 tags"
+            });
+        });
 
-                    
-    const menuIcon=document.getElementById('menu-icon');
+        // Mobile menu toggle
+        const menuIcon = document.getElementById('menu-icon');
+        const navLinks = document.getElementById('nav-links');
+        const menuBackdrop = document.getElementById('menu-backdrop');
 
-    const navLinks=document.getElementById('nav-links');
-    const menuBackdrop = document.getElementById('menu-backdrop');
-    menuIcon.addEventListener('click',()=>{
-    navLinks.classList.toggle('active');
-    menuBackdrop.classList.toggle('active');
-    })
+        menuIcon.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            menuBackdrop.classList.toggle('active');
+        });
 
-    menuBackdrop.addEventListener('click',()=>{
-    navLinks.classList.remove('active');
-    menuBackdrop.classList.remove('active');
-    });
-        function handleLogout(){
-            fetch('/logout',{method:'POST'})
-              .then(response=>{
-                if(response.ok){
-                    // console.log("logged out");
-                   
-                    // document.cookie = 'token=; Max-Age=0; path=/';
-                    window.location.href='/';
-                }else{
-                    console.log('Logout failed');
-                }
-              })
-              .catch(error=>{
-                console.log('Error:',error);
-              });
+        menuBackdrop.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            menuBackdrop.classList.remove('active');
+        });
+
+        // Validate tag limit on form submit
+        document.getElementById('update-blog-form').addEventListener('submit', function(event) {
+            const selectedTags = $('#tags').val();
+            if (selectedTags.length > 5) {
+                event.preventDefault();
+                alert('You can only select up to 5 tags');
+            }
+        });
+
+        // Logout functionality
+        function handleLogout() {
+            fetch('/logout', { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/';
+                    } else {
+                        console.log('Logout failed');
+                    }
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                });
         }
 
-        document.getElementById("logout-button").addEventListener('click',handleLogout);
-
-
-
-        document.getElementById('update-blog-form').addEventListener('submit',function(event){
-    const tagsSelect=document.getElementById('tags');
-    const selectedTags=Array.from(tagsSelect.selectedOptions).map(option=> option.value);
-    const formData = new FormData(event.target);
-
-    if(selectedTags.length>5){
-        event.preventDefault();
-        alert('You can only select up to 5 tags');
-        return;
-    }
-// const hiddenTagsInput=document.createElement('input');
-// hiddenTagsInput.type='hidden';
-// hiddenTagsInput.name='tags';
-// hiddenTagsInput.value=JSON.stringify(selectedTags);
-// this.appendChild(hiddenTagsInput);
-
-  });
+        document.getElementById("logout-button").addEventListener('click', handleLogout);
     </script>
 </body>
 </html>

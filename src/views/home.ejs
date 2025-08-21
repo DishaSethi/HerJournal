@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Blog Platform</title>
+    <title>Her Journal - Women's Wellness Platform</title>
     <link rel="stylesheet" href="/styles/styles.css"> 
     <link rel="stylesheet" href="/styles/home.css"> 
 </head>
@@ -13,9 +13,9 @@
           <div class="menu-icon" id="menu-icon">&#9776;</div>
           <div class="menu-backdrop" id="menu-backdrop"></div>
             <ul id="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/profile">Profile</a></li>
-                <li><a href="/create">Create Blog</a></li>
+                <li><a href="/">Wellness Feed</a></li>
+                <li><a href="/profile">My Wellness Space</a></li>
+                <li><a href="/create">New Reflection</a></li>
                 <% if (isAuthenticated) { %>
                     <li><button id="logout-button">Logout</button></li>
                 <% } else { %>
@@ -24,11 +24,13 @@
             </ul>
         </nav>
 
-        <h1>Welcome to the blog platform</h1>
+        <h1>Welcome to Her Journal</h1>
+
+<p class="subtitle">A safe space for women to share, reflect, and grow</p>
         <form id="search" method="get" action="/">
             <input id="search-input" type="text" name="keyword" value="<%- keyword ? keyword : '' %>" placeholder="Search by keyword, author, tags, or username">
             <select id="search-type" name="searchType">
-                <option value="blog" <%= searchType === 'blog' ? 'selected' : '' %>>Blogs</option>
+                <option value="blog" <%= searchType === 'blog' ? 'selected' : '' %>>Reflections</option>
                 <option value="profile" <%= searchType === 'profile' ? 'selected' : '' %>>Profiles</option>
             </select>
             <button type="submit">Search</button>
@@ -47,7 +49,7 @@
                 <% }) %>
             </ul>
         <% } else { %>
-            <h1>Recent Blogs</h1>
+            <h1>Recent Reflections</h1>
             <ul id="blogList">
                 <% blogs.forEach(blog => { %>
                     <li>

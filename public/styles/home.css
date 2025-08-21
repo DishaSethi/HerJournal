@@ -9,7 +9,11 @@
     width: 50vw;
     
 }
-
+.subtitle{
+    display: flex;
+    justify-content: center;
+    font-size: 1.2em;
+}
 
 #blogList {
     display: flex;

@@ -22,31 +22,31 @@
             <div class="menu-backdrop" id="menu-backdrop"></div>
         
             <ul id="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/profile">Profile</a></li>
-                <li><a href="/create">Create Blog</a></li>
+                <li><a href="/">Wellness Feed</a></li>
+                <li><a href="/profile">My Wellness Space</a></li>
+                <li><a href="/create">Create Reflection</a></li>
                 <li><button id="logout-button">Logout</button></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <h1>Create a New Blog</h1>
+        <h1>Create a New Reflection</h1>
         <form id="create-blog-form" method="POST" action="<%=apiUrl2%>/create">
             <label for="title">Title:</label>
             <input type="text" name="title" id="title" required> <br><br>
 
-            <label for="content">Content:</label>
+            <label for="content">Reflection:</label>
             <textarea name="content" id="content" rows="10" required></textarea> <br><br>
 
-            <label for="tags">Select Tags (Max 5)</label>
+            <label for="tags">Select Moods (Max 5)</label>
             <select name="tags[]" id="tags" multiple="multiple" required>
                 <% allowedTags.forEach(tag => { %>
                     <option value="<%= tag %>"><%= tag %></option>
                 <% }) %>
             </select> <br><br>
 
-            <button type="submit">Create Blog</button>
+            <button type="submit">Create Reflection</button>
         </form>
     </main>
 

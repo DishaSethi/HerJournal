@@ -1,10 +1,15 @@
 const BlogTagsEnum= Object.freeze({
-    TECHNICAL:'Technical',
-    COOKING:'Cooking',
-    FASHION:'Fashion',
-    TRAVEL:'Travel',
-    LIFESTYLE:'Lifestyle',
-    HEALTH:'Health',
+    HAPPY:'Happy',
+    SAD:'Sad',
+    EXCITED:'Excited',
+    CALM:'Calm',
+    ANGRY:'Angry',
+    MOTIVATED:'Motivated',
+    LONELY:'Lonely',
+    STRESSED:'Stressed',
+    GRATEFUL:'Grateful',
+    NOSTALGIC:'Nostalgic',
+
 });
 
 
