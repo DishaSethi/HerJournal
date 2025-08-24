@@ -1,22 +1,30 @@
-<h1 align="center" id="title">Blog-Plaform</h1>
+<h1 align="center" id="title">HerJournal 🌸</h1>
 
-<p id="description">A full-stack blog platform built with the  MEN stack with EJS featuring CRUD operations, JWT authentication, real-time commenting and optimized performance with pagination and search functionality.</p>
+<p id="description">
+HerJournal is a women’s wellness and journaling platform built on the <b>MERN stack</b> with EJS templates.  
+It enables women to share reflections, track moods, and connect in a safe space through features like secure authentication, CRUD blogs, real-time commenting, and optimized content discovery with search, filters, and pagination.
+</p>
 
-<h2>🚀 Demo</h2>
+<h2>🚀 Live Demo</h2>
 
-[https://blog-platform-1-vssh.onrender.com/](https://blog-platform-1-vssh.onrender.com/)
+👉 [HerJournal on Render](https://blog-platform-1-vssh.onrender.com/)
 
-  
-  
-<h2>💻 Built with</h2>
+<h2>✨ Features</h2>
 
-Technologies used in the project:
+- 🔐 JWT authentication + session login for secure access  
+- 📓 Full **CRUD** for personal reflections/blogs  
+- 💬 Real-time commenting powered by **Socket.IO**  
+- 🏷 Mood & tag-based filtering  
+- 🔍 Search + pagination (5 posts/page) for efficient discovery  
+- 🎨 Dark, minimal feminine UI  
 
-*   HTML
-*   CSS
-*   JS
-*   EJS
-*   Socket.IO
-*   Express JS
-*   Node JS
-*   MongoDB
+<h2>💻 Built With</h2>
+
+Technologies used in this project:
+
+- **Frontend**: HTML, CSS, JavaScript, EJS  
+- **Backend**: Node.js, Express.js  
+- **Database**: MongoDB (Mongoose)  
+- **Real-time**: Socket.IO  
+- **Auth**: JWT + express-session  
+
