@@ -7,7 +7,7 @@ It enables women to share reflections, track moods, and connect in a safe space 
 
 <h2>🚀 Live Demo</h2>
 
-👉 [HerJournal on Render](https://blog-platform-1-vssh.onrender.com/)
+👉 [HerJournal on Render](https://herjournal-2.onrender.com/)
 
 <h2>✨ Features</h2>
 
